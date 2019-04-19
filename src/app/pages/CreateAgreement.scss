@@ -41,11 +41,14 @@
         display: flex;
 
         > :first-child {
+            flex-basis: auto;
             flex-grow: 1;
         }
 
         > :last-child {
             min-width: 140px;
+            flex-basis: auto;
+            flex-grow: 1;
         }
 
     }
