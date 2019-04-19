@@ -23,18 +23,22 @@ export default class NavBar extends Component {
         if (state.currentAccount != account) {
             state.currentAccount = account;
         }
-        // todo: network update
+        const network = await this.provider.getNetwork(); // Always returns the same net, looks like a bug in Ethers
+        if (network && network.chainId !== state.currentNetwork.chainId) {
+            state.currentNetwork = network;
+        }
     }
 
     async updateFromProviderLoop () {
         await this.updateFromProvider();
-        this.accountUpdateTimeout = setTimeout(this.updateFromProviderLoop, 100);
+        this.accountUpdateTimeout = setTimeout(this.updateFromProviderLoop.bind(this), 100);
     }
 
     async componentDidMount () {
         try {
             this.provider = await getProvider();
             this.updateFromProviderLoop();
+            console.log("Provider", this.provider);
         } catch (e) {
             new Toast(e, Toast.TYPE_ERROR, Toast.TIME_LONG);
         }
