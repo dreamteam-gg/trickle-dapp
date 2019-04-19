@@ -1,0 +1,61 @@
+@import "../Const.scss";
+
+.double-input {
+
+    display: flex;
+
+    > :first-child {
+        flex-grow: 1;
+        margin: $globalMargin;
+    }
+
+    > :last-child {
+        min-width: 140px;
+        margin: $globalMargin;
+    }
+
+}
+
+.form-input {
+
+    display: flex;
+    flex-direction: column;
+
+    > .label {
+        padding: 0 $globalMargin;
+        font-size: small;
+        color: gray;
+    }
+
+    > * {
+
+        > * {
+            margin: $globalMargin;
+            margin-top: 0;
+        }
+
+    }
+
+    &.double > * {
+
+        display: flex;
+
+        > :first-child {
+            flex-grow: 1;
+        }
+
+        > :last-child {
+            min-width: 140px;
+        }
+
+    }
+
+}
+
+.single-input {
+
+    > * {
+        margin: $globalMargin !important;
+    }
+
+}

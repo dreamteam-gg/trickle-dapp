@@ -1,4 +1,5 @@
 import { observable, observe, action } from "mobx";
+import { defaultDurationOption, defaultDurationCounter } from "./constants";
 import tokens from "./tokens.json";
 
 const state = observable({
@@ -10,7 +11,16 @@ const state = observable({
     },
 
     allTokens: [],
-    defaultToken: {}
+
+    inputAgreementRecipientAddress: "0x17A813dF7322F8AAC5cAc75eB62c0d13B8aea29D",
+    inputAgreementTokenValue: 100,
+    inputAgreementSelectedToken: {},
+    inputAgreementPeriodDuration: defaultDurationOption, // Seconds
+    inputAgreementPeriodCounter: defaultDurationCounter,
+    inputAgreementStartDate: new Date(),
+
+    confirmationTokensAreApproved: false,
+    confirmationDisplayError: ""
 
 });
 
@@ -24,7 +34,7 @@ observe(state, "currentNetwork", action(async ({ newValue }) => {
     }
 
     state.allTokens = (tokens[newValue.name] || []);
-    state.defaultToken = state.allTokens
+    state.inputAgreementSelectedToken = state.allTokens
         .find(({ address }) => address === "0x82f4ded9cec9b5750fbff5c2185aee35afc16587")
         || state.allTokens[0]
         || {};

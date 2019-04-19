@@ -10,6 +10,12 @@ import CreateAgreement from "./pages/CreateAgreement";
 import ConfirmAgreement from "./pages/ConfirmAgreement";
 import Agreement from "./pages/Agreement";
 
+// Enables localization for date inputs
+import dateFnsLocalizer from "react-widgets-date-fns";
+import simpleNumberLocalizer from "react-widgets-simple-number";
+dateFnsLocalizer();
+simpleNumberLocalizer();
+
 import "./App.scss";
 
 export default class App extends Component {
