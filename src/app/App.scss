@@ -1,0 +1,50 @@
+$font-path: '~react-widgets/lib/fonts';
+$img-path: '~react-widgets/lib/img';
+
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif');
+@import '~react-widgets/lib/scss/react-widgets';
+@import "./Const.scss";
+@import "./Icons.scss";
+
+html, body {
+    background: #fafafa;
+    display: flex;
+    justify-content: center;
+    min-width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    color: #444;
+    font-family: 'Noto Serif', serif;
+    text-shadow: 1px 1px 1px white;
+}
+
+.center {
+    text-align: center;
+}
+
+.standard-padding {
+    padding: $globalMargin;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+#app {
+
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    > .page {
+        
+        justify-content: center;
+        flex-direction: column;
+        flex-grow: 1;
+        display: flex;
+
+    }
+
+}
