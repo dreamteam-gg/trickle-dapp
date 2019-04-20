@@ -23,6 +23,10 @@ html, body {
     text-align: center;
 }
 
+.hidden {
+    display: none;
+}
+
 .standard-padding {
     padding: $globalMargin;
 }

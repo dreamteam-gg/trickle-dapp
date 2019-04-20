@@ -29,7 +29,8 @@ export default class Index extends Component {
         const { CreateAgreementButton } = this;
         return <div className="center index page">
             <div>
-                <h1>Trickle</h1>
+                <div className="logo icon"/>
+                <h1 className="hidden">Trickle</h1>
                 <div>
                     Your hourly pay, cryptographically secured.
                 </div>
