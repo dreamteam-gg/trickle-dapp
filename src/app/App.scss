@@ -61,9 +61,13 @@ html, body {
 .buttons {
 
     > * {
-        margin: $globalMargin;
+        margin: $globalMargin !important;
     }
 
+}
+
+strong {
+    margin: 0;
 }
 
 .form-input {
@@ -77,7 +81,7 @@ html, body {
         color: gray;
     }
 
-    > * {
+    > *:not(.label) {
 
         > * {
             margin: $globalMargin;

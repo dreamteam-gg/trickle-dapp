@@ -10,7 +10,7 @@ import { getPathForRouter } from "../../utils";
 import * as Trickle from "../../ethereum/Trickle";
 import { agreementPagePath } from "../../constants";
 import { startLoading, completeLoading } from "./Loading";
-import { Combobox } from "react-widgets";
+import { Combobox, DateTimePicker } from "react-widgets";
 
 @observer
 export default class Agreement extends Component {
@@ -68,12 +68,12 @@ export default class Agreement extends Component {
         const agreement = await Trickle.getAgreement(this.props.agreementId);
 
         state.agreementRecipientAddress = agreement.recipient;
-        state.agreementDuration = agreement.duration;
+        state.agreementDuration = +agreement.duration;
         state.agreementStartDate = new Date(agreement.start * 1000);
         state.agreementSenderAddress = agreement.sender;
         state.agreementTokenAddress = agreement.token;
-        state.agreementTokenValue = agreement.value;
-        state.agreementReleasedTokenValue = agreement.releasedAmount;
+        state.agreementTokenValue = agreement.totalAmount.toString();
+        state.agreementReleasedTokenValue = agreement.releasedAmount.toString();
         
         const [decimals, symbol] = await Promise.all([
             Trickle.getTokenDecimals(agreement.token),
@@ -87,19 +87,29 @@ export default class Agreement extends Component {
 
     render () {
         const { CancelAgreementButton, WithdrawButton, BackToAgreementsButton } = this;
-        return <div className="standard-padding agreement-page">
-            <div className="center buttons">
-                <BackToAgreementsButton/>
-            </div>
-            <h1 className="center">
+        const now = new Date();
+        const progress = Math.min(1, Math.max(0, (now.getTime() - state.agreementStartDate.getTime()) / (state.agreementDuration * 1000)));
+        const status = progress <= 0
+            ? "Scheduled"
+            : progress >= 1
+                ? "Completed"
+                : "Active";
+        return <div className="agreement-page">
+            <h1 className="standard-padding center agreement-header">
                 <div className="agreement icon"/>
                 Agreement #{ this.props["agreementId"] }
             </h1>
-            <p>
-                Status: ?
-            </p>
+            <div className="center subtext">Status: <strong className={ `status-${ status.toLowerCase() }` }>{ status }</strong></div>
+            <div>
+                <TokenProgressBar startDate={ state.agreementStartDate }
+                                  duration={ state.agreementDuration }
+                                  value={ state.agreementTokenValue / Math.pow(10, state.agreementTokenDecimals) }
+                                  releasedValue={ state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals) }
+                                  decimals={ state.agreementTokenDecimals }
+                                  tokenSymbol={ state.agreementTokenSymbol }/>
+            </div>
             <div className="single form-input">
-                <div className="label">Recipient's Ethereum Account</div>
+                <div className="label"><strong>Recipient</strong>'s Ethereum Account</div>
                 <div>
                     <Combobox data={[state.agreementRecipientAddress]}
                               value={ state.agreementRecipientAddress }
@@ -107,17 +117,19 @@ export default class Agreement extends Component {
                               selectIcon={ <div className="tiny copy icon"/> }/>
                 </div>
             </div>
-            <div>
-                <TokenProgressBar startDate={ state.agreementStartDate }
-                                  duration={ state.agreementDuration }
-                                  value={ state.agreementTokenValue / state.agreementTokenDecimals }
-                                  releasedValue={ state.agreementReleasedTokenValue / state.agreementTokenDecimals }
-                                  decimals={ state.agreementTokenDecimals }
-                                  tokenSymbol={ state.agreementTokenSymbol }/>
+            <div className="single form-input">
+                <div className="label">Sender's Ethereum Account</div>
+                <div>
+                    <Combobox data={[state.agreementSenderAddress]}
+                              value={ state.agreementSenderAddress }
+                              readOnly
+                              selectIcon={ <div className="tiny copy icon"/> }/>
+                </div>
             </div>
             <div className="center buttons">
                 <WithdrawButton/>
                 <CancelAgreementButton/>
+                <BackToAgreementsButton/>
             </div>
         </div>
     }
