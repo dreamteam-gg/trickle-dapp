@@ -5,6 +5,12 @@ import getProvider from "./provider";
 import { contractsByNetwork, confirmationsToWait } from "../constants";
 import state from "../state";
 
+function calculateWithDecimals(value) {
+    return utils.bigNumberify(value).mul(
+        utils.bigNumberify(10).pow(utils.bigNumberify(state.inputAgreementSelectedToken.decimal)) 
+    );
+}
+
 async function getTrickleAddress () {
 
     const provider = await getProvider();
@@ -88,8 +94,9 @@ export async function isTokenAllowed () {
     const owner = state.currentAccount;
     const spender = await getTrickleAddress();
     const allowance = await contract.allowance(owner, spender);
+    const tokenValue = calculateWithDecimals(state.inputAgreementTokenValue);
 
-    return allowance.gte(utils.bigNumberify(state.inputAgreementTokenValue));
+    return allowance.gte(tokenValue);
 
 }
 
@@ -105,8 +112,8 @@ export async function createAgreement () {
         throw new Error(`Undefined recipient`);
     }
 
-    const totalAmount = utils.bigNumberify(state.inputAgreementTokenValue);
-    if (!totalAmount) {
+    const tokenValue = calculateWithDecimals(state.inputAgreementTokenValue);
+    if (!tokenValue) {
         throw new Error(`Undefined token value`);
     }
 
@@ -122,7 +129,7 @@ export async function createAgreement () {
     }
 
     const trickleContract = await getTrickleContract();
-    const tx = await trickleContract.createAgreement(token, recipient, totalAmount, duration, start);
+    const tx = await trickleContract.createAgreement(token, recipient, tokenValue, duration, start);
     const txReceipt = await tx.wait(confirmationsToWait);
     const agreementCreatedEvent = txReceipt.events.find(
         (event) => { return event.event === 'AgreementCreated' }
