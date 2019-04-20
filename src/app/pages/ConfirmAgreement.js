@@ -7,6 +7,7 @@ import { withRouter } from "react-router-dom";
 import { getPathForRouter } from "../../utils";
 import { startLoading, completeLoading } from "./Loading";
 import * as Trickle from "../../ethereum/Trickle";
+import { Toast } from "toaster-js";
 
 @observer
 export default class ConfirmAgreement extends Component {
@@ -14,11 +15,12 @@ export default class ConfirmAgreement extends Component {
     ApproveTokensDemoButton = withRouter(({ history }) => (
         <input type="submit"
                onClick={ this.approveTokens.bind(this, history) }
-               value="Approve!"/>
+               value="Approve Tokens"/>
     ));
 
     CreateAgreementButton = withRouter(({ history }) => (
         <input type="submit"
+               className="warning"
                onClick={ this.createAgreement.bind(this, history) }
                value="Create Agreement"/>
     ));
@@ -42,11 +44,17 @@ export default class ConfirmAgreement extends Component {
         startLoading(
             history,
             getPathForRouter(confirmAgreementPagePath),
-            "Awaiting Tokens Approval...",
-            "Your approval transaction is being mined, please wait"
+            "Waiting for Approval...",
+            "Your token approval transaction is pending, please wait until we get a confirmation."
         );
 
-        await Trickle.allowTokens();
+        try {
+            await Trickle.allowTokens();
+        } catch (e) {
+            new Toast("Transaction failed: you've cancelled the transaction", Toast.TYPE_ERROR);
+            completeLoading(history, getPathForRouter(confirmAgreementPagePath));
+            return;
+        }
 
         completeLoading(history);
 
@@ -57,11 +65,18 @@ export default class ConfirmAgreement extends Component {
         startLoading(
             history,
             getPathForRouter(agreementPagePath),
-            "Creating Agreement...",
-            "Your submit transaction is being mined, please wait"
+            "Creating an Agreement...",
+            `Your agreement creation transaction of ${ state.inputAgreementTokenValue } ${ state.inputAgreementSelectedToken.symbol } is being mined, please wait...`
         );
 
-        const agreementId = await Trickle.createAgreement();
+        let agreementId;
+        try {
+            agreementId = await Trickle.createAgreement();
+        } catch (e) {
+            new Toast("Transaction failed: you've cancelled the transaction or you have no required tokens", Toast.TYPE_ERROR);
+            completeLoading(history, getPathForRouter(confirmAgreementPagePath));
+            return;
+        }
 
         startLoading( // Just to give the new agreementId
             history,

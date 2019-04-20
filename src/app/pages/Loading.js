@@ -16,15 +16,21 @@ export function startLoading (history, redirect, title, desc) {
     }
 }
 
-export function completeLoading (history) {
-    history.push(state.loadingRedirectTo);
+export function completeLoading (history, redirect) {
+    history.push(redirect || state.loadingRedirectTo);
 }
 
 export default class Agreement extends Component {
 
     render () {
         return <div className="standard-padding">
-            <h1>{ state.loadingPageHeader }</h1>
+            <h1 className="center">
+                <div className="warning icon"/>
+                { state.loadingPageHeader }
+            </h1>
+            <div className="center">
+                <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
             <p>{ state.loadingPageText }</p>
         </div>
     }
