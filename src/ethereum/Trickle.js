@@ -123,7 +123,7 @@ export async function createAgreement () {
 export async function cancelAgreement(agreementId) {
     
     const trickleContract = await getTrickleContract();
-    const tx = trickleContract.cancelAgreement(agreementId);
+    const tx = await trickleContract.cancelAgreement(agreementId);
     await tx.wait(confirmationsToWait);
 
 }
