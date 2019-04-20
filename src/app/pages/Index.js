@@ -46,7 +46,7 @@ export default class Index extends Component {
                 <div className="subtitle">
                     <div>Your hourly pay, cryptographically secured.</div>
                     <div className="subtext">
-                        Pay or get paid with tokens or stablecoins, today.
+                        Pay or get paid with tokens or stablecoins, for each second of your work. Today.
                     </div>
                 </div>
                 <ProgressBar tokenSymbol={ demoTokens[this.state.tick % demoTokens.length] }/>

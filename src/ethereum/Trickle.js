@@ -5,7 +5,8 @@ import getProvider from "./provider";
 import { contractsByNetwork, confirmationsToWait } from "../constants";
 import state from "../state";
 
-async function getTrickleAddress() {
+async function getTrickleAddress () {
+
     const provider = await getProvider();
     const net = await provider.getNetwork();
     const netName = (net || {}).name;
@@ -28,7 +29,7 @@ async function getTrickleContract () {
 
 }
 
-async function getTokenContract() {
+async function getTokenContract () {
 
     const address = state.inputAgreementSelectedToken.address;
     if (!address) {
@@ -59,7 +60,7 @@ export async function getAgreement (agreementId) {
 
 }
 
-export async function allowTokens() {
+export async function allowTokens () {
 
     const contract = await getTokenContract();
     const trickleAddress = await getTrickleAddress();
@@ -69,7 +70,7 @@ export async function allowTokens() {
 
 }
 
-export async function isTokenAllowed() {
+export async function isTokenAllowed () {
 
     const contract = await getTokenContract();
     const owner = state.currentAccount;
@@ -80,7 +81,7 @@ export async function isTokenAllowed() {
 
 }
 
-export async function createAgreement() {
+export async function createAgreement () {
 
     const token = state.inputAgreementSelectedToken.address;
     if (!token) {
@@ -116,6 +117,7 @@ export async function createAgreement() {
     );
     
     return agreementCreatedEvent.args[0].toString();
+
 }
 
 export async function cancelAgreement(agreementId) {

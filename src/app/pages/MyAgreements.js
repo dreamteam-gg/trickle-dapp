@@ -29,7 +29,10 @@ export default class MyAgreements extends Component {
             <div className="buttons standard-padding center">
                 <BackButton/>
             </div>
-            <h1 className="center">My Agreements</h1>
+            <h1 className="center">
+                <div className="agreement icon"/>
+                My Agreements
+            </h1>
             <div>{ state.relatedAgreements.map((agreement) => {
                 const ButtonComponent = GoToAgreementButton(agreement.agreementId);
                 return <div key={ agreement.agreementId }
