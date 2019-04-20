@@ -61,10 +61,16 @@ observe(state, "currentAccount", action(async ({ newValue }) => {
 
     // TODO: contracts loading logic
     // await contract...
+    
+    // const status = progress <= 0
+    //         ? "Scheduled"
+    //         : progress >= 1
+    //             ? "Completed"
+    //             : "Active";
     await new Promise(r => setTimeout(r, 600)); // Simulate delay
     state.relatedAgreements = [
-        { startDate: new Date(), agreementId: 1, sender: state.currentAccount, recipient: state.currentAccount },
-        { startDate: new Date(), agreementId: 2, sender: state.currentAccount, recipient: state.currentAccount }
+        { startDate: new Date(), duration: 60 * 60 * 24, agreementId: 1, sender: state.currentAccount, recipient: state.currentAccount },
+        { startDate: new Date(), duration: 60 * 60 * 24, agreementId: 2, sender: state.currentAccount, recipient: state.currentAccount }
     ];
 
 }));

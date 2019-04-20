@@ -4,7 +4,7 @@ import "./MyAgreements.scss";
 import state from "../../state";
 import { withRouter } from "react-router-dom";
 import { indexPagePath, agreementPagePath } from "../../constants";
-import { getPathForRouter } from "../../utils";
+import { getPathForRouter, shortenEthereumAddress } from "../../utils";
 
 @observer
 export default class MyAgreements extends Component {
@@ -15,12 +15,12 @@ export default class MyAgreements extends Component {
                value="← Back to Home"/>
     ));
 
-    GoToAgreementButton = (agreementId) => withRouter(({ history }) => (
+    GoToAgreementButton = (agreementId, isManaged) => withRouter(({ history }) => (
         <input type="submit"
                onClick={ () => { history.push(getPathForRouter(agreementPagePath, {
                    agreementId
                })) } }
-               value="View →"/>
+               value={ isManaged ? "Manage →" : "View →" }/>
     ));
 
     render () {
@@ -34,19 +34,29 @@ export default class MyAgreements extends Component {
                 My Agreements
             </h1>
             <div>{ state.relatedAgreements.map((agreement) => {
-                const ButtonComponent = GoToAgreementButton(agreement.agreementId);
+
+                const isManaged = agreement.sender === state.currentAccount;
+                const ButtonComponent = GoToAgreementButton(agreement.agreementId, isManaged);
+                const endDate = new Date(agreement.startDate.getTime() + agreement.duration * 1000);
+
                 return <div key={ agreement.agreementId }
-                     className="agreement-card">
+                            className="agreement-card">
                     <div className="head">
                         <div>Agreement #{ agreement.agreementId }</div>
-                        <div>{ agreement.startDate.toLocaleString() }</div>
+                        <div className="subtext dates">
+                            <div>From { agreement.startDate.toLocaleString() }</div>
+                            <div>To { endDate.toLocaleString() }</div>
+                        </div>
                     </div>
-                    <div className="subtext"><strong>Created By</strong>: { agreement.sender }</div>
-                    <div className="subtext"><strong>Recipient</strong>: { agreement.recipient }</div>
-                    <div className="buttons">
+                    <div className="addresses">
+                        <div className="subtext"><strong>Created By</strong>: { shortenEthereumAddress(agreement.sender) }</div>
+                        <div className="subtext"><strong>Recipient</strong>: { shortenEthereumAddress(agreement.recipient) }</div>
+                    </div>
+                    <div className="buttons center">
                         <ButtonComponent/>
                     </div>
                 </div>
+
             }) }</div>
         </div>
     }

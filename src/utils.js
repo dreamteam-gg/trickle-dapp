@@ -6,3 +6,10 @@ export function getPathForRouter (path, params = {}) {
         return params[paramName] || "UNDEFINED_GOOSE";
     }) }`;
 }
+
+export function shortenEthereumAddress (address) {
+    if (typeof(address) !== "string") {
+        return address;
+    }
+    return address.substr(0, 6) + ".." + address.substr(-4);
+}
