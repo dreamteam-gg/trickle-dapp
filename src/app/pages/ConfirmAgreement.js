@@ -90,7 +90,6 @@ export default class ConfirmAgreement extends Component {
         const {
             CreateAgreementButton, ApproveTokensDemoButton, BackToEditingButton
         } = this;
-        console.log(state.confirmationTokensAreApproved);
         return <div className="standard-padding confirm-agreement-page">
             <h1 className="center">
                 <div className="protection icon"/>

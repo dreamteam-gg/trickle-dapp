@@ -19,7 +19,7 @@ export default class CreateAgreement extends Component {
     BackButton = withRouter(({ history }) => (
         <input type="submit"
                onClick={ () => { history.push(getPathForRouter(indexPagePath)) } }
-               value="← Back"/>
+               value="← Back to Home"/>
     ));
 
     onValueChange = (value) => state.inputAgreementTokenValue = value;

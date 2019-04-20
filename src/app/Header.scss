@@ -13,8 +13,12 @@
         margin-right: 0;
     }
 
-    > *:last-child {
+    > *:nth-child(2) {
         flex-grow: 1;
+    }
+
+    > *:last-child {
+        margin-left: 0;
     }
 
 }

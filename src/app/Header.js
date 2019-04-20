@@ -60,6 +60,11 @@ export default class NavBar extends Component {
             <DropdownList onChange={ this.walletHint }
                           data={ [state.currentAccount, "Select another account..."] }
                           value={ state.currentAccount }/>
+            <div>
+                <a target="_blank" href="https://github.com/ZitRos/trickle-dapp-frontend">
+                    <div className="small info icon"/>
+                </a>
+            </div>
         </div>
     }
 
