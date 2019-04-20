@@ -10,12 +10,27 @@ import { getPathForRouter } from "../../utils";
 import * as Trickle from "../../ethereum/Trickle";
 import { agreementPagePath } from "../../constants";
 import { startLoading, completeLoading } from "./Loading";
-import { Combobox, DateTimePicker } from "react-widgets";
+import { Combobox } from "react-widgets";
 
 @observer
 export default class Agreement extends Component {
 
     // this.props["agreementId"] is available
+
+    state = {
+        dummy: 0
+    };
+
+    timer = 0;
+
+    componentWillUnmount () {
+        clearInterval(this.timer);
+    }
+
+    tick = () => 
+    !console.log("!~!!") && this.setState({
+        dummy: this.state.dummy + 1
+    });
 
     async cancelAgreementButtonClick (history) {
         startLoading(
@@ -65,6 +80,8 @@ export default class Agreement extends Component {
     @action
     async componentDidMount () {
 
+        this.timer = setInterval(this.tick, 1000);
+        
         const agreement = await Trickle.getAgreement(this.props.agreementId);
 
         state.agreementRecipientAddress = agreement.recipient;
@@ -107,6 +124,18 @@ export default class Agreement extends Component {
                                   releasedValue={ state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals) }
                                   decimals={ state.agreementTokenDecimals }
                                   tokenSymbol={ state.agreementTokenSymbol }/>
+            </div>
+            <div className="standard-padding">
+                <div className="subtext">
+                    <strong>Withdrawn:</strong> {
+                        state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals)
+                    } { state.agreementTokenSymbol }
+                </div>
+                <div className="subtext">
+                    <strong>Withdrawable:</strong> {
+                        (progress * state.agreementTokenValue - state.agreementReleasedTokenValue) / Math.pow(10, state.agreementTokenDecimals)
+                    } { state.agreementTokenSymbol }
+                </div>
             </div>
             <div className="single form-input">
                 <div className="label"><strong>Recipient</strong>'s Ethereum Account</div>
