@@ -4,7 +4,8 @@ import Footer from "./Footer";
 import "toaster-js/default.scss";
 import { getPathForRouter } from "../utils";
 import {
-    agreementPagePath, confirmAgreementPagePath, createAgreementPagePath, loadingPagePath, myAgreementsPagePath
+    agreementPagePath, confirmAgreementPagePath, createAgreementPagePath, loadingPagePath, myAgreementsPagePath,
+    infoPagePath
 } from "../constants";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import IndexPage from "./pages/Index";
@@ -12,6 +13,7 @@ import CreateAgreement from "./pages/CreateAgreement";
 import ConfirmAgreement from "./pages/ConfirmAgreement";
 import Agreement from "./pages/Agreement";
 import MyAgreements from "./pages/MyAgreements";
+import Info from "./pages/Info";
 import Loading from "./pages/Loading";
 
 // Enables localization for date inputs
@@ -36,6 +38,7 @@ export default class App extends Component {
                     <Route exact path={ getPathForRouter(createAgreementPagePath) } component={ CreateAgreement } />
                     <Route exact path={ getPathForRouter(loadingPagePath) } component={ Loading } />
                     <Route exact path={ getPathForRouter(myAgreementsPagePath) } component={ MyAgreements } />
+                    <Route exact path={ getPathForRouter(infoPagePath) } component={ Info } />
                     <Route component={ IndexPage } />
                 </Switch>
             </div>

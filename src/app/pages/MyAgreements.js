@@ -42,7 +42,9 @@ export default class MyAgreements extends Component {
                 return <div key={ agreement.agreementId }
                             className="agreement-card">
                     <div className="head">
-                        <div>Agreement #{ agreement.agreementId }</div>
+                        <div>
+                            <div>Agreement #{ agreement.agreementId }</div>
+                        </div>
                         <div className="subtext dates">
                             <div>From { agreement.startDate.toLocaleString() }</div>
                             <div>To { endDate.toLocaleString() }</div>

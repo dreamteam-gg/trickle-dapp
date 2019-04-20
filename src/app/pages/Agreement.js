@@ -28,8 +28,7 @@ export default class Agreement extends Component {
         clearInterval(this.timer);
     }
 
-    tick = () => 
-    !console.log("!~!!") && this.setState({
+    tick = () => this.setState({
         dummy: this.state.dummy + 1
     });
 
@@ -131,6 +130,7 @@ export default class Agreement extends Component {
             : progress >= 1
                 ? "Completed"
                 : "Active";
+        const isOwner = state.currentAccount === state.agreementSenderAddress;
         return <div className="agreement-page">
             <h1 className="standard-padding center agreement-header">
                 <div className="agreement icon"/>
@@ -176,9 +176,9 @@ export default class Agreement extends Component {
                 </div>
             </div>
             <div className="center buttons">
-                <WithdrawButton/>
-                <CancelAgreementButton/>
                 <BackToAgreementsButton/>
+                <WithdrawButton/>
+                { isOwner ? <CancelAgreementButton/> : null }
             </div>
         </div>
     }

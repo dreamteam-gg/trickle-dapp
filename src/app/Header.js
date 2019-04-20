@@ -5,6 +5,9 @@ import "./Header.scss";
 import { DropdownList } from "react-widgets";
 import state from "../state";
 import { observer } from "mobx-react";
+import { infoPagePath } from "../constants";
+import { withRouter } from "react-router-dom";
+import { getPathForRouter } from "../utils";
 
 @observer
 export default class NavBar extends Component {
@@ -52,7 +55,17 @@ export default class NavBar extends Component {
         new Toast("You can choose another wallet in Metamask or your mobile wallet");
     }
 
+    InfoButton = withRouter(({ history }) => (
+        // <input type="submit"
+        //        onClick={ () => { history.push(getPathForRouter(indexPagePath)) } }
+        //        value="← Back to Home"/>
+        <a href="#" onClick={ () => { history.push(getPathForRouter(infoPagePath)) } }>
+            <div className="small info icon"/>
+        </a>
+    ));
+
     render () {
+        const { InfoButton } = this;
         return <div className="header">
             <div>
                 <div className="small user icon"/>
@@ -61,9 +74,7 @@ export default class NavBar extends Component {
                           data={ [state.currentAccount, "Select another account..."] }
                           value={ state.currentAccount }/>
             <div>
-                <a target="_blank" href="https://github.com/ZitRos/trickle-dapp-frontend">
-                    <div className="small info icon"/>
-                </a>
+                <InfoButton/>
             </div>
         </div>
     }
