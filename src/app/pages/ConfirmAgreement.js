@@ -51,6 +51,7 @@ export default class ConfirmAgreement extends Component {
         try {
             await Trickle.allowTokens();
         } catch (e) {
+            console.log(e);
             new Toast("Transaction failed: you've cancelled the transaction", Toast.TYPE_ERROR);
             completeLoading(history, getPathForRouter(confirmAgreementPagePath));
             return;
@@ -73,6 +74,7 @@ export default class ConfirmAgreement extends Component {
         try {
             agreementId = await Trickle.createAgreement();
         } catch (e) {
+            console.log(e);
             new Toast("Transaction failed: you've cancelled the transaction or you have no required tokens", Toast.TYPE_ERROR);
             completeLoading(history, getPathForRouter(confirmAgreementPagePath));
             return;
