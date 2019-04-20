@@ -2,6 +2,7 @@ export const createAgreementPagePath = "/create-new-agreement";
 export const loadingPagePath = "/loading";
 export const confirmAgreementPagePath = "/confirm-new-agreement";
 export const agreementPagePath = "/view-agreement/:agreementId";
+export const myAgreementsPagePath = "/my-agreements";
 export const indexPagePath = "/";
 export const publicUrlPathPrefix = window.location.host.indexOf("github.io") !== -1
     ? "/trickle-dapp-frontend"
