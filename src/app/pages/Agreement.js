@@ -105,6 +105,7 @@ export default class Agreement extends Component {
             state.agreementTokenAddress = agreement.token;
             state.agreementTokenValue = agreement.totalAmount.toString();
             state.agreementReleasedTokenValue = agreement.releasedAmount.toString();
+            state.agreementCancelled = agreement.cancelled;
             
             const [decimals, symbol] = await Promise.all([
                 Trickle.getTokenDecimals(agreement.token),
@@ -125,7 +126,7 @@ export default class Agreement extends Component {
         const { CancelAgreementButton, WithdrawButton, BackToAgreementsButton } = this;
         const now = new Date();
         const progress = Math.min(1, Math.max(0, (now.getTime() - state.agreementStartDate.getTime()) / (state.agreementDuration * 1000)));
-        const status = progress <= 0
+        const status = (state.agreementCancelled) ? "Canceled" : progress <= 0
             ? "Scheduled"
             : progress >= 1
                 ? "Completed"

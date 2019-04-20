@@ -29,6 +29,7 @@ const state = observable({
     agreementTokenAddress: "",
     agreementDuration: defaultDurationCounter * defaultDurationOption,
     agreementStartDate: new Date(),
+    agreementCancelled: false,
 
     confirmationTokensAreApproved: false,
     confirmationDisplayError: "",
