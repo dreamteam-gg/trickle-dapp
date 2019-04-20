@@ -6,6 +6,7 @@ import { createAgreementPagePath, confirmAgreementPagePath, agreementPagePath } 
 import { withRouter } from "react-router-dom";
 import { getPathForRouter } from "../../utils";
 import { startLoading, completeLoading } from "./Loading";
+import * as Trickle from "../../ethereum/Trickle";
 
 @observer
 export default class ConfirmAgreement extends Component {
@@ -33,9 +34,7 @@ export default class ConfirmAgreement extends Component {
     }
 
     async updateTokensApprovalState () {
-        // TODO
-        // await ...
-        // state.confirmationTokensAreApproved = false; // set to true when tokens are approved
+        state.confirmationTokensAreApproved = await Trickle.isTokenAllowed();
     }
 
     approveTokens = async (history) => {
@@ -47,10 +46,8 @@ export default class ConfirmAgreement extends Component {
             "Your approval transaction is being mined, please wait"
         );
 
-        // TODO: token approval and awaiting logic
-        await new Promise((r) => setTimeout(r, 2000)); // Emulate approval mining; allow some extra time
+        await Trickle.allowTokens();
 
-        state.confirmationTokensAreApproved = true; // TODO: delete once this.updateTokensApprovalState is complete
         completeLoading(history);
 
     }
@@ -64,14 +61,11 @@ export default class ConfirmAgreement extends Component {
             "Your submit transaction is being mined, please wait"
         );
 
-        // TODO: transaction publishing logic
-        await new Promise((r) => setTimeout(r, 2000)); // Emulate approval mining; allow some extra time
+        const agreementId = await Trickle.createAgreement();
 
         startLoading( // Just to give the new agreementId
             history,
-            getPathForRouter(agreementPagePath, {
-                agreementId: 1
-            }),
+            getPathForRouter(agreementPagePath, {agreementId}),
         );
         completeLoading(history);
 
