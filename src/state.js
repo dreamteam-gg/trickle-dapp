@@ -54,4 +54,16 @@ observe(state, "currentNetwork", action(async ({ newValue }) => {
 
 }));
 
+observe(state, "currentAccount", action(async ({ newValue }) => {
+
+    // TODO: contracts loading logic
+    // await contract...
+    await new Promise(r => setTimeout(r, 600)); // Simulate delay
+    state.relatedAgreements = [
+        { startDate: new Date(), agreementId: 1, sender: state.currentAccount, recipient: state.currentAccount },
+        { startDate: new Date(), agreementId: 2, sender: state.currentAccount, recipient: state.currentAccount }
+    ];
+
+}));
+
 console.log("State", state);

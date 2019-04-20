@@ -4,7 +4,10 @@ import { observer } from "mobx-react";
 import { action } from "mobx";
 import { withRouter } from "react-router-dom";
 import { getAgreement } from "../../ethereum/Trickle";
+import TokenProgressBar from "../components/TokenProgressBar";
 import "./AgreementPage.scss";
+import { myAgreementsPagePath } from "../../constants";
+import { getPathForRouter } from "../../utils";
 
 @observer
 export default class Agreement extends Component {
@@ -18,6 +21,12 @@ export default class Agreement extends Component {
     async withdrawButtonClick () {
 
     }
+
+    BackToAgreementsButton = withRouter(({ history }) => (
+        <input type="submit"
+               onClick={ () => { history.push(getPathForRouter(myAgreementsPagePath)) } }
+               value="← Back to Agreements"/>
+    ));
 
     CancelAgreementButton = withRouter(({ history }) => (
         <input type="submit"
@@ -41,8 +50,11 @@ export default class Agreement extends Component {
     }
 
     render () {
-        const { CancelAgreementButton, WithdrawButton } = this;
+        const { CancelAgreementButton, WithdrawButton, BackToAgreementsButton } = this;
         return <div className="standard-padding agreement-page">
+            <div className="center buttons">
+                <BackToAgreementsButton/>
+            </div>
             <h1 className="center">Agreement #{ this.props["agreementId"] }</h1>
             <p>
                 Status: ?
@@ -50,6 +62,9 @@ export default class Agreement extends Component {
             <p>
                 Recipient: { state.agreementRecipientAddress }
             </p>
+            <div>
+                <TokenProgressBar/>
+            </div>
             <div className="center buttons">
                 <WithdrawButton/>
                 <CancelAgreementButton/>
