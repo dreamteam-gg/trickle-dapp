@@ -43,7 +43,7 @@ export default class Index extends Component {
             <div>{ state.relatedAgreements.map((agreement) =>
                 <div key={ agreement.agreementId }
                      className="agreement-card">
-                    <div class="head">
+                    <div className="head">
                         <div>Agreement #{ agreement.agreementId }</div>
                         <div>{ agreement.startDate.toLocaleString() }</div>
                     </div>

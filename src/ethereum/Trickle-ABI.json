@@ -1,0 +1,234 @@
+[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "agreementId",
+				"type": "uint256"
+			}
+		],
+		"name": "withdrawTokens",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "agreementId",
+				"type": "uint256"
+			}
+		],
+		"name": "getAgreement",
+		"outputs": [
+			{
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"name": "start",
+				"type": "uint256"
+			},
+			{
+				"name": "duration",
+				"type": "uint256"
+			},
+			{
+				"name": "totalAmount",
+				"type": "uint256"
+			},
+			{
+				"name": "releasedAmount",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "agreementId",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelAgreement",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"name": "totalAmount",
+				"type": "uint256"
+			},
+			{
+				"name": "duration",
+				"type": "uint256"
+			},
+			{
+				"name": "start",
+				"type": "uint256"
+			}
+		],
+		"name": "createAgreement",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "agreementId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "start",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "duration",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "totalAmount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "createdAt",
+				"type": "uint256"
+			}
+		],
+		"name": "AgreementCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "agreementId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "start",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "amountReleased",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "amountCancelled",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "endedAt",
+				"type": "uint256"
+			}
+		],
+		"name": "AgreementCancelled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "agreementId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "amountReleased",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "releasedAt",
+				"type": "uint256"
+			}
+		],
+		"name": "Withdraw",
+		"type": "event"
+	}
+]

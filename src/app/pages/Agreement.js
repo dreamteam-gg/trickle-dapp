@@ -3,6 +3,7 @@ import state from "../../state";
 import { observer } from "mobx-react";
 import { action } from "mobx";
 import { withRouter } from "react-router-dom";
+import { getAgreement } from "../../ethereum/Trickle";
 import "./AgreementPage.scss";
 
 @observer
@@ -33,8 +34,8 @@ export default class Agreement extends Component {
 
     @action
     async componentDidMount () {
-        await new Promise(r => setTimeout(r, 500)); // TODO: replace simulated delay with getting contract details
-        state.agreementRecipientAddress = "0xLOADED";
+        const agreement = await getAgreement(this.props.agreementId);
+        state.agreementRecipientAddress = agreement.recipient;
         // ...
 
     }
