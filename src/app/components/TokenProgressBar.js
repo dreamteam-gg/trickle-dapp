@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "./TokenProgressBar.scss";
 
-export default class Agreement extends Component {
+export default class TokenProgressBar extends Component {
 
     static defaultProps = {
         startDate: new Date(),
-        duration: 1000 * 60 * 2,
+        duration: 60 * 2,
         value: 100, // whole number
         releasedValue: 0,
         decimals: 2,
@@ -31,7 +31,7 @@ export default class Agreement extends Component {
     render () {
         const now = Date.now();
         const start = this.props.startDate.getTime();
-        const duration = this.props.duration;
+        const duration = this.props.duration * 1000;
         const ratio = Math.max(0, Math.min(1, ((now - start) / duration)));
         const releasedRatio = Math.max(0, Math.min(1, (this.props.releasedValue / this.props.value)));
         const value = this.props.value * ratio;

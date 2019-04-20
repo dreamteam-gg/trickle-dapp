@@ -77,7 +77,7 @@ export default class CreateAgreement extends Component {
                                     onChange={ this.onStartDateSet }/>
                 </div>
             </div>
-            <div className="center standard-padding buttons">
+            <div className="center buttons">
                 <BackButton/>
                 <AgreementConfirmButton/>
             </div>

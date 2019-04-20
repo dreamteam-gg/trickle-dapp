@@ -58,6 +58,64 @@ html, body {
 
 }
 
+.buttons {
+
+    > * {
+        margin: $globalMargin !important;
+    }
+
+}
+
+strong {
+    margin: 0;
+}
+
+.form-input {
+
+    display: flex;
+    flex-direction: column;
+
+    > .label {
+        padding: 0 $globalMargin;
+        font-size: small;
+        color: gray;
+    }
+
+    > *:not(.label) {
+
+        > * {
+            margin: $globalMargin;
+            margin-top: 0;
+        }
+
+    }
+
+    &.double > * {
+
+        display: flex;
+
+        > :first-child {
+            flex-basis: 50%;
+            flex-grow: 1;
+        }
+
+        > :last-child {
+            flex-basis: 50%;
+            flex-grow: 1;
+        }
+
+    }
+
+}
+
+.single-input {
+
+    > * {
+        margin: $globalMargin !important;
+    }
+
+}
+
 input[type=submit] {
     
     @extend .rw-widget-container, .rw-widget-picker, .rw-widget-input, .rw-input;

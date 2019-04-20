@@ -2,6 +2,18 @@
 
 .agreement-page {
 
+    .agreement-header {
+        margin-bottom: 0;
+    }
+
+    .status-active {
+        color: #00bd00;
+    }
+
+    .status-completed {
+        color: #ff9b00;
+    }
+
     > .buttons {
 
         > * {
