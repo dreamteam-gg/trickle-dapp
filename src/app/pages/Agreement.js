@@ -10,13 +10,14 @@ import { myAgreementsPagePath } from "../../constants";
 import { getPathForRouter } from "../../utils";
 import * as Trickle from "../../ethereum/Trickle";
 import { agreementPagePath } from "../../constants";
+import { startLoading, completeLoading } from "./Loading";
 
 @observer
 export default class Agreement extends Component {
 
     // this.props["agreementId"] is available
 
-    async cancelAgreementButtonClick () {
+    async cancelAgreementButtonClick (history) {
         startLoading(
             history,
             getPathForRouter(agreementPagePath),
