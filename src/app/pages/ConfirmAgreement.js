@@ -4,7 +4,7 @@ import "./ConfirmAgreement.scss";
 import { observer } from "mobx-react";
 import { createAgreementPagePath, confirmAgreementPagePath, agreementPagePath } from "../../constants";
 import { withRouter } from "react-router-dom";
-import { getPathForRouter } from "../../utils";
+import { getPathForRouter, getEtherscanLinkToAddress } from "../../utils";
 import { startLoading, completeLoading } from "./Loading";
 import * as Trickle from "../../ethereum/Trickle";
 import { Toast } from "toaster-js";
@@ -107,18 +107,18 @@ export default class ConfirmAgreement extends Component {
             <p>
                 You are about to sign a smart contract with your recipient.
             </p>
-            <ol>
+            <ol className="subtext">
                 <li>
-                    <span className="bold">Smart Contract Address</span>: <a target="_blank" href={ "https://etherscan.io/address/" + "0x" }>0x</a>
+                    <span className="bold">Smart Contract Address</span>: <a target="_blank" href={ getEtherscanLinkToAddress(state.inputAgreementSelectedToken.address, state.currentNetwork.name) }>{ state.inputAgreementSelectedToken.address }</a>
                 </li>
                 <li>
-                    <span className="bold">Recipient Ethereum Account</span>: <a target="_blank" href={ "https://etherscan.io/address/" + state.inputAgreementRecipientAddress }>{ state.inputAgreementRecipientAddress }</a>
+                    <span className="bold">Recipient Ethereum Account</span>: <a target="_blank" href={ getEtherscanLinkToAddress(state.inputAgreementRecipientAddress, state.currentNetwork.name) }>{ state.inputAgreementRecipientAddress }</a>
                 </li>
                 <li>
                     <span className="bold">Locked Value for Recipient</span>: { state.inputAgreementTokenValue } { state.inputAgreementSelectedToken.symbol }
                 </li>
                 <li>
-                    <span className="bold">Token Contract</span>: <a target="_blank" href={ "https://etherscan.io/address/" + state.inputAgreementSelectedToken.address }>{ state.inputAgreementSelectedToken.address }</a>
+                    <span className="bold">Token Contract</span>: <a target="_blank" href={ getEtherscanLinkToAddress(state.inputAgreementSelectedToken.address, state.currentNetwork.name) }>{ state.inputAgreementSelectedToken.address }</a>
                 </li>
                 <li>
                     <span className="bold">Agreement Period Starts At</span>: { new Date(state.inputAgreementStartDate).toLocaleString() }
@@ -133,7 +133,7 @@ export default class ConfirmAgreement extends Component {
                     <span className="bold">Agreement Termination Policy</span>: Recipient receives all tokens that accrued prior to the termination date. 
                 </li>
                 <li>
-                    <span className="bold">Agreement Can Be Terminated By</span>: Both customer and contractor.
+                    <span className="bold">Agreement Can Be Terminated By</span>: Customer only.
                 </li>
             </ol>
             <div>

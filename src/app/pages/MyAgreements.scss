@@ -7,6 +7,21 @@ $img-path: '~react-widgets/lib/img';
 
     .agreement-card {
 
+        .dates {
+            text-align: right;
+        }
+
+        .addresses {
+            
+            display: flex;
+            flex-direction: row;
+
+            > * {
+                flex-grow: 1;
+            }
+
+        }
+
         text-align: left;
         margin: $globalMargin;
         background-color: white;
