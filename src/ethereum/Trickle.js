@@ -73,13 +73,13 @@ export async function getAgreement (agreementId) {
         start: data.start,
         duration: data.duration,
         totalAmount: data.totalAmount,
-        releasedAmount: data.releasedAmount
+        releasedAmount: data.releasedAmount,
+        cancelled: data.cancelled
     };
 
 }
 
 export async function allowTokens () {
-
     const contract = await getTokenContract();
     const trickleAddress = await getTrickleAddress();
     const totalSupply = await contract.totalSupply();
@@ -131,20 +131,23 @@ export async function createAgreement () {
     const trickleContract = await getTrickleContract();
     const tx = await trickleContract.createAgreement(token, recipient, tokenValue, duration, start);
     const txReceipt = await tx.wait(confirmationsToWait);
+    console.log(txReceipt);
     const agreementCreatedEvent = txReceipt.events.find(
         (event) => { return event.event === 'AgreementCreated' }
     );
-    
+
     return agreementCreatedEvent.args[0].toString();
 
 }
 
 export async function cancelAgreement(agreementId) {
+    console.log(await getAgreement(agreementId));
     
     const trickleContract = await getTrickleContract();
     const tx = await trickleContract.cancelAgreement(agreementId);
     await tx.wait(confirmationsToWait);
-
+    
+    console.log(await getAgreement(agreementId));
 }
 
 export async function withdrawTokens(agreementId) {
