@@ -1,6 +1,5 @@
 import { providers } from "ethers";
 import { Toast } from "toaster-js";
-
 export default async function getProvider () {
 
     const timeout = setTimeout(() => new Toast("Please, sign in with your crypto wallet", Toast.TYPE_INFO, Toast.TIME_LONG), 5000);
@@ -22,5 +21,4 @@ export default async function getProvider () {
 
     clearTimeout(timeout);
     return new providers.Web3Provider(window.web3.currentProvider);
-
 };

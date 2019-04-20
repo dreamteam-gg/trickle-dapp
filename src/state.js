@@ -1,6 +1,7 @@
 import { observable, observe, action } from "mobx";
 import { defaultDurationOption, defaultDurationCounter } from "./constants";
 import tokens from "./tokens.json";
+import * as Trickle from "./ethereum/Trickle";
 
 const state = observable({
 
@@ -58,21 +59,23 @@ observe(state, "currentNetwork", action(async ({ newValue }) => {
 }));
 
 observe(state, "currentAccount", action(async ({ newValue }) => {
+    function mapAgreement(item) {
+        return {
+            startDate: new Date(item.start * 1000),
+            duration: item.duration.toString(),
+            agreementId: item.agreementId.toString(),
+            sender: item.sender,
+            recipient: item.recipient
+        }
+    }
 
-    // TODO: contracts loading logic
-    // await contract...
-    
-    // const status = progress <= 0
-    //         ? "Scheduled"
-    //         : progress >= 1
-    //             ? "Completed"
-    //             : "Active";
-    await new Promise(r => setTimeout(r, 600)); // Simulate delay
+    const recipientAgreements = (await Trickle.getCreatedAgreements(newValue)).map(mapAgreement);
+    const senderAgreements = (await Trickle.getCreatedAgreements(null, newValue)).map(mapAgreement);
+
     state.relatedAgreements = [
-        { startDate: new Date(), duration: 60 * 60 * 24, agreementId: 1, sender: state.currentAccount, recipient: state.currentAccount },
-        { startDate: new Date(), duration: 60 * 60 * 24, agreementId: 2, sender: state.currentAccount, recipient: state.currentAccount }
+        ...recipientAgreements,
+        ...senderAgreements
     ];
-
 }));
 
 console.log("State", state);

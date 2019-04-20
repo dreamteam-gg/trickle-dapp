@@ -5,49 +5,6 @@ import getProvider from "./provider";
 import { contractsByNetwork, confirmationsToWait } from "../constants";
 import state from "../state";
 
-function calculateWithDecimals(value) {
-    return utils.bigNumberify(value).mul(
-        utils.bigNumberify(10).pow(utils.bigNumberify(state.inputAgreementSelectedToken.decimal)) 
-    );
-}
-
-async function getTrickleAddress () {
-
-    const provider = await getProvider();
-    const net = await provider.getNetwork();
-    const netName = (net || {}).name;
-    const address = contractsByNetwork[netName];
-
-    if (!address) {
-        throw new Error(`Trickle contract is not deployed to selected network ${ netName }`);
-    }
-
-    return address;
-
-}
-
-async function getTrickleContract () {
-
-    const provider = await getProvider();
-    const address = await getTrickleAddress();
-
-    return new Contract(address, contractAbi, provider.getSigner());
-
-}
-
-async function getTokenContract (addr) {
-
-    const address = addr || state.inputAgreementSelectedToken.address;
-    if (!address) {
-        throw new Error(`Undefined token adress`);
-    }
-
-    const provider = await getProvider();
-
-    return new Contract(address, tokenContractAbi, provider.getSigner());
-
-}
-
 export async function getTokenDecimals (address) {
 
     return await (await getTokenContract(address)).decimals();
@@ -67,14 +24,7 @@ export async function getAgreement (agreementId) {
 
     return {
         agreementId,
-        recipient: data.recipient,
-        sender: data.sender,
-        token: data.token,
-        start: data.start,
-        duration: data.duration,
-        totalAmount: data.totalAmount,
-        releasedAmount: data.releasedAmount,
-        cancelled: data.cancelled
+        ...data
     };
 
 }
@@ -155,5 +105,76 @@ export async function withdrawTokens(agreementId) {
     const trickleContract = await getTrickleContract();
     const tx = await trickleContract.withdrawTokens(agreementId);
     await tx.wait(confirmationsToWait);
+
+}
+
+export async function getCreatedAgreements(recipient = null, sender = null) {
+    const contract = await getTrickleContract();
+    const provider = await getProvider();
+
+    const filter = contract.filters.AgreementCreated(null, null, recipient, sender);
+    filter.fromBlock = await getTrickleBlock();
+    const eventEntries = Object.entries(contract.interface.events);
+
+    let logs = await provider.getLogs(filter);
+    logs = logs.map((item) => { return eventEntries.find(([,{ name }]) => name === "AgreementCreated")[1].decode(item.data, item.topics) });
+
+    return logs;
+}
+
+function calculateWithDecimals(value) {
+    return utils.bigNumberify(value).mul(
+        utils.bigNumberify(10).pow(utils.bigNumberify(state.inputAgreementSelectedToken.decimal)) 
+    );
+}
+
+async function getTrickleBlock () {
+    const provider = await getProvider();
+    const net = await provider.getNetwork();
+    const netName = (net || {}).name;
+    const block = contractsByNetwork[netName].block;
+
+    if (!block) {
+        throw new Error(`Trickle contract is not deployed to selected network ${ netName }`);
+    }
+
+    return block;
+
+}
+
+async function getTrickleAddress () {
+
+    const provider = await getProvider();
+    const net = await provider.getNetwork();
+    const netName = (net || {}).name;
+    const address = contractsByNetwork[netName].address;
+
+    if (!address) {
+        throw new Error(`Trickle contract is not deployed to selected network ${ netName }`);
+    }
+
+    return address;
+
+}
+
+async function getTrickleContract () {
+
+    const provider = await getProvider();
+    const address = await getTrickleAddress();
+
+    return new Contract(address, contractAbi, provider.getSigner());
+
+}
+
+async function getTokenContract (addr) {
+
+    const address = addr || state.inputAgreementSelectedToken.address;
+    if (!address) {
+        throw new Error(`Undefined token adress`);
+    }
+
+    const provider = await getProvider();
+
+    return new Contract(address, tokenContractAbi, provider.getSigner());
 
 }
