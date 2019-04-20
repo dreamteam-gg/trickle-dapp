@@ -8,6 +8,8 @@ import TokenProgressBar from "../components/TokenProgressBar";
 import "./AgreementPage.scss";
 import { myAgreementsPagePath } from "../../constants";
 import { getPathForRouter } from "../../utils";
+import * as Trickle from "../../ethereum/Trickle";
+import { agreementPagePath } from "../../constants";
 
 @observer
 export default class Agreement extends Component {
@@ -15,11 +17,29 @@ export default class Agreement extends Component {
     // this.props["agreementId"] is available
 
     async cancelAgreementButtonClick () {
+        startLoading(
+            history,
+            getPathForRouter(agreementPagePath),
+            "Cancelling your agreement...",
+            "Your submit transaction is being mined, please wait"
+        );
 
+        await Trickle.cancelAgreement(this.props.agreementId);
+
+        completeLoading(history);
     }
 
-    async withdrawButtonClick () {
+    async withdrawButtonClick (history) {
+        startLoading(
+            history,
+            getPathForRouter(agreementPagePath, {agreementId: this.props.agreementId}),
+            "Withdraw your tokens...",
+            "Your submit transaction is being mined, please wait"
+        );
 
+        await Trickle.withdrawTokens(this.props.agreementId);
+
+        completeLoading(history);
     }
 
     BackToAgreementsButton = withRouter(({ history }) => (
@@ -45,8 +65,11 @@ export default class Agreement extends Component {
     async componentDidMount () {
         const agreement = await getAgreement(this.props.agreementId);
         state.agreementRecipientAddress = agreement.recipient;
-        // ...
-
+        state.agreementDuration = agreement.duration;
+        state.agreementStartDate = new Date(agreement.start * 1000);
+        state.agreementSenderAddress = agreement.sender;
+        state.agreementTokenAddress = agreement.token;
+        state.agreementTokenValue = agreement.value;
     }
 
     render () {
