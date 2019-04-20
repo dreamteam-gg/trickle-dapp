@@ -2,58 +2,6 @@
 
 .create-agreement-page {
 
-    .buttons {
-
-        > * {
-            margin: $globalMargin;
-        }
-
-    }
     
-    .form-input {
-    
-        display: flex;
-        flex-direction: column;
-    
-        > .label {
-            padding: 0 $globalMargin;
-            font-size: small;
-            color: gray;
-        }
-    
-        > * {
-    
-            > * {
-                margin: $globalMargin;
-                margin-top: 0;
-            }
-    
-        }
-    
-        &.double > * {
-    
-            display: flex;
-    
-            > :first-child {
-                flex-basis: 50%;
-                flex-grow: 1;
-            }
-    
-            > :last-child {
-                flex-basis: 50%;
-                flex-grow: 1;
-            }
-    
-        }
-    
-    }
-    
-    .single-input {
-    
-        > * {
-            margin: $globalMargin !important;
-        }
-    
-    }
 
 }

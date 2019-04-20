@@ -29,9 +29,9 @@ async function getTrickleContract () {
 
 }
 
-async function getTokenContract () {
+async function getTokenContract (addr) {
 
-    const address = state.inputAgreementSelectedToken.address;
+    const address = addr || state.inputAgreementSelectedToken.address;
     if (!address) {
         throw new Error(`Undefined token adress`);
     }
@@ -39,6 +39,18 @@ async function getTokenContract () {
     const provider = await getProvider();
 
     return new Contract(address, tokenContractAbi, provider.getSigner());
+
+}
+
+export async function getTokenDecimals (address) {
+
+    return await (await getTokenContract(address)).decimals();
+
+}
+
+export async function getTokenSymbol (address) {
+
+    return await (await getTokenContract(address)).symbol();
 
 }
 
