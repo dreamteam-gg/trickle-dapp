@@ -1379,7 +1379,7 @@ eval("exports = module.exports = __webpack_require__(/*! ../../node_modules/css-
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\")(false);\n// Module\nexports.push([module.i, \".header {\\n  display: flex;\\n  flex-direction: row; }\\n  .header > * {\\n    margin: 6px 3px; }\\n  .header > *:last-child {\\n    flex-grow: 1; }\\n\", \"\"]);\n\n\n\n//# sourceURL=webpack:///./src/app/Header.scss?./node_modules/css-loader/dist/cjs.js??ref--6-1!./node_modules/sass-loader/lib/loader.js");
+eval("exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\")(false);\n// Module\nexports.push([module.i, \".header {\\n  display: flex;\\n  flex-direction: row; }\\n  .header > * {\\n    margin: 6px; }\\n  .header > *:first-child {\\n    margin-right: 0; }\\n  .header > *:last-child {\\n    flex-grow: 1; }\\n\", \"\"]);\n\n\n\n//# sourceURL=webpack:///./src/app/Header.scss?./node_modules/css-loader/dist/cjs.js??ref--6-1!./node_modules/sass-loader/lib/loader.js");
 
 /***/ }),
 

@@ -6,7 +6,11 @@
     flex-direction: row;
 
     > * {
-        margin: $globalMargin #{ $globalMargin / 2 };
+        margin: $globalMargin;
+    }
+
+    > *:first-child {
+        margin-right: 0;
     }
 
     > *:last-child {
