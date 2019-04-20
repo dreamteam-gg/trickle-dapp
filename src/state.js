@@ -20,7 +20,12 @@ const state = observable({
     inputAgreementStartDate: new Date(),
 
     confirmationTokensAreApproved: false,
-    confirmationDisplayError: ""
+    confirmationDisplayError: "",
+
+    loadingPageHeader: "Loading...",
+    loadingPageText: "Please, wait",
+    loadingRedirectTo: "",
+    loaded: false
 
 });
 

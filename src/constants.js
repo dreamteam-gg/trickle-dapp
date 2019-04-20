@@ -1,4 +1,5 @@
 export const createAgreementPagePath = "/create-new-agreement";
+export const loadingPagePath = "/loading";
 export const confirmAgreementPagePath = "/confirm-new-agreement";
 export const agreementPagePath = "/view-agreement";
 export const publicUrlPathPrefix = window.location.host.indexOf("github.io") !== -1

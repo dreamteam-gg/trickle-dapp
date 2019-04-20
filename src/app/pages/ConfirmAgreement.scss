@@ -1,0 +1,15 @@
+@import "../Const.scss";
+
+.confirm-agreement-page {
+    word-break: break-word;
+}
+
+.buttons-section {
+    
+    text-align: center;
+
+    > * {
+        margin: $globalMargin !important;
+    }
+
+}
