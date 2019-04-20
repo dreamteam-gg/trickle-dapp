@@ -8,9 +8,10 @@ import "./AgreementPage.scss";
 import { myAgreementsPagePath } from "../../constants";
 import { getPathForRouter } from "../../utils";
 import * as Trickle from "../../ethereum/Trickle";
-import { agreementPagePath } from "../../constants";
+import { agreementPagePath, createAgreementPagePath } from "../../constants";
 import { startLoading, completeLoading } from "./Loading";
 import { Combobox } from "react-widgets";
+import { Toast } from "toaster-js";
 
 @observer
 export default class Agreement extends Component {
@@ -40,7 +41,14 @@ export default class Agreement extends Component {
             "Your submit transaction is being mined, please wait"
         );
 
-        await Trickle.cancelAgreement(this.props.agreementId);
+        try {
+            await Trickle.cancelAgreement(this.props.agreementId);
+        } catch (e) {
+            console.log(e);
+            new Toast("Can't cancel already cancelled agreement", Toast.TYPE_ERROR);
+            completeLoading(history, getPathForRouter(agreementPagePath, { agreementId: this.props.agreementId }));
+            return;
+        }
 
         completeLoading(history);
     }
@@ -53,7 +61,14 @@ export default class Agreement extends Component {
             "Your submit transaction is being mined, please wait"
         );
 
-        await Trickle.withdrawTokens(this.props.agreementId);
+        try {
+            await Trickle.withdrawTokens(this.props.agreementId);
+        } catch (e) {
+            console.log(e);
+            new Toast("Nothing to withdraw right now", Toast.TYPE_ERROR);
+            completeLoading(history, getPathForRouter(agreementPagePath, { agreementId: this.props.agreementId }));
+            return;
+        }
 
         completeLoading(history);
     }
@@ -79,27 +94,32 @@ export default class Agreement extends Component {
 
     @action
     async componentDidMount () {
-
-        this.timer = setInterval(this.tick, 1000);
+        try {
+            this.timer = setInterval(this.tick, 1000);
         
-        const agreement = await Trickle.getAgreement(this.props.agreementId);
-
-        state.agreementRecipientAddress = agreement.recipient;
-        state.agreementDuration = +agreement.duration;
-        state.agreementStartDate = new Date(agreement.start * 1000);
-        state.agreementSenderAddress = agreement.sender;
-        state.agreementTokenAddress = agreement.token;
-        state.agreementTokenValue = agreement.totalAmount.toString();
-        state.agreementReleasedTokenValue = agreement.releasedAmount.toString();
-        
-        const [decimals, symbol] = await Promise.all([
-            Trickle.getTokenDecimals(agreement.token),
-            Trickle.getTokenSymbol(agreement.token)
-        ]);
-
-        state.agreementTokenDecimals = +decimals;
-        state.agreementTokenSymbol = symbol;
-
+            const agreement = await Trickle.getAgreement(this.props.agreementId);
+    
+            state.agreementRecipientAddress = agreement.recipient;
+            state.agreementDuration = +agreement.duration;
+            state.agreementStartDate = new Date(agreement.start * 1000);
+            state.agreementSenderAddress = agreement.sender;
+            state.agreementTokenAddress = agreement.token;
+            state.agreementTokenValue = agreement.totalAmount.toString();
+            state.agreementReleasedTokenValue = agreement.releasedAmount.toString();
+            
+            const [decimals, symbol] = await Promise.all([
+                Trickle.getTokenDecimals(agreement.token),
+                Trickle.getTokenSymbol(agreement.token)
+            ]);
+    
+            state.agreementTokenDecimals = +decimals;
+            state.agreementTokenSymbol = symbol;
+        } catch (e) {
+            console.log(e);
+            new Toast("Something wrong with agreement", Toast.TYPE_ERROR);
+            completeLoading(history, createAgreementPagePath);
+            return;
+        }
     }
 
     render () {

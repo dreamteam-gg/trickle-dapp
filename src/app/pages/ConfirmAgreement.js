@@ -32,7 +32,14 @@ export default class ConfirmAgreement extends Component {
     ));
 
     async componentDidMount () {
-        await this.updateTokensApprovalState();
+        try {
+            await this.updateTokensApprovalState();
+        } catch (e) {
+            console.log(e);
+            new Toast("Can't get token allowance status", Toast.TYPE_ERROR);
+            completeLoading(history, getPathForRouter(confirmAgreementPagePath));
+            return;
+        }
     }
 
     async updateTokensApprovalState () {
