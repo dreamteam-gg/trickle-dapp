@@ -19,7 +19,7 @@ export const defaultDurationCounter = 3;
 
 export const contractsByNetwork = {
     "homestead": "0x",
-    "ropsten": "0xe0a72d0f38d195176ef01414182393fd69e2403a"
+    "ropsten": "0x85649F1721c87b3Fb26fb484642ff31561c2F0ae"
 };
 
 export const confirmationsToWait = 1;

@@ -20,7 +20,7 @@ export default class Agreement extends Component {
     async cancelAgreementButtonClick (history) {
         startLoading(
             history,
-            getPathForRouter(agreementPagePath),
+            getPathForRouter(agreementPagePath, {agreementId: this.props.agreementId}),
             "Cancelling your agreement...",
             "Your submit transaction is being mined, please wait"
         );
