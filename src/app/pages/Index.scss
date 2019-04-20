@@ -1,7 +1,46 @@
+@import "../Const.scss";
+$font-path: '~react-widgets/lib/fonts';
+$img-path: '~react-widgets/lib/img';
+@import '~react-widgets/lib/scss/react-widgets';
+
 .index.page {
 
     > h1 {
         margin-bottom: 0;
+    }
+
+    .agreement-card {
+
+        text-align: left;
+        margin: $globalMargin;
+        background-color: white;
+        @extend .rw-widget-container;
+
+        > .head {
+
+            display: flex;
+            flex-direction: row;
+
+            > *:first-child {
+                flex-grow: 1;
+                font-weight: bold;
+            }
+
+            > *:last-child {
+                color: $colorTextMinor;
+            }
+
+            > * {
+                padding: $globalMargin;
+            }
+
+        }
+
+        > *:not(:first-child) {
+            padding: $globalMargin;
+            word-break: break-word;
+        }
+
     }
 
 }

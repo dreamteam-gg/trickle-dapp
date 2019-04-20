@@ -60,7 +60,7 @@ export default class ConfirmAgreement extends Component {
         startLoading(
             history,
             getPathForRouter(agreementPagePath),
-            "Create Agreement...",
+            "Creating Agreement...",
             "Your submit transaction is being mined, please wait"
         );
 

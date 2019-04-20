@@ -10,11 +10,9 @@ export function startLoading (history, redirect, title, desc) {
     state.loadingRedirectTo = redirect;
     state.loadingPageHeader = title;
     state.loadingPageText = desc;
-    state.loadingComplete = false;
 }
 
 export function completeLoading (history) {
-    state.loadingComplete = true;
     history.push(state.loadingRedirectTo);
 }
 

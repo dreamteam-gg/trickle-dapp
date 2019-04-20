@@ -25,7 +25,8 @@ const state = observable({
     loadingPageHeader: "Loading...",
     loadingPageText: "Please, wait",
     loadingRedirectTo: "",
-    loaded: false
+
+    relatedAgreements: [] // See pages/Index.js
 
 });
 
