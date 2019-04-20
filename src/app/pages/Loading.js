@@ -20,7 +20,7 @@ export function completeLoading (history, redirect) {
     history.push(redirect || state.loadingRedirectTo);
 }
 
-export default class Agreement extends Component {
+export default class Loading extends Component {
 
     render () {
         return <div className="standard-padding">
