@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { action } from "mobx";
 import { withRouter } from "react-router-dom";
 import { getAgreement } from "../../ethereum/Trickle";
+import TokenProgressBar from "../components/TokenProgressBar";
 import "./AgreementPage.scss";
 
 @observer
@@ -50,6 +51,9 @@ export default class Agreement extends Component {
             <p>
                 Recipient: { state.agreementRecipientAddress }
             </p>
+            <div>
+                <TokenProgressBar/>
+            </div>
             <div className="center buttons">
                 <WithdrawButton/>
                 <CancelAgreementButton/>

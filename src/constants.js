@@ -20,3 +20,9 @@ export const contractsByNetwork = {
     "homestead": "0x",
     "ropsten": "0xe0a72d0f38d195176ef01414182393fd69e2403a"
 };
+export const demoTokens = [
+    "DAI",
+    "ZRX",
+    "USD",
+    "MKR"
+];

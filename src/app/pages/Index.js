@@ -2,12 +2,18 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 import { withRouter } from "react-router-dom";
 import { getPathForRouter } from "../../utils";
-import { createAgreementPagePath } from "../../constants";
+import { createAgreementPagePath, demoTokens } from "../../constants";
 import "./Index.scss";
 import state from "../../state";
+import ProgressBar from "../components/TokenProgressBar";
 
 @observer
 export default class Index extends Component {
+
+    state = {
+        tick: 0
+    };
+    demoInterval = 0;
 
     async componentDidMount () {
         // TODO: contracts loading logic
@@ -17,6 +23,11 @@ export default class Index extends Component {
             { startDate: new Date(), agreementId: 1, sender: state.currentAccount, recipient: state.currentAccount },
             { startDate: new Date(), agreementId: 2, sender: state.currentAccount, recipient: state.currentAccount }
         ];
+        this.demoInterval = setInterval(() => this.setState({ tick: this.state.tick + 1 }), 2000);
+    }
+
+    componentWillUnmount () {
+        clearInterval(this.demoInterval);
     }
 
     CreateAgreementButton = withRouter(({ history }) => (
@@ -31,12 +42,13 @@ export default class Index extends Component {
             <div>
                 <div className="logo icon"/>
                 <h1 className="hidden">Trickle</h1>
-                <div>
-                    Your hourly pay, cryptographically secured.
+                <div className="subtitle">
+                    <div>Your hourly pay, cryptographically secured.</div>
+                    <div className="subtext">
+                        Pay or get paid with tokens or stablecoins, today.
+                    </div>
                 </div>
-                <p>
-                    [Some fun graphics here]
-                </p>
+                <ProgressBar tokenSymbol={ demoTokens[this.state.tick % demoTokens.length] }/>
                 <div className="center standard-padding">
                     <CreateAgreementButton/>
                 </div>
