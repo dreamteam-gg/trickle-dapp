@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { durationOptions, confirmAgreementPagePath } from "../../constants";
+import { durationOptions, confirmAgreementPagePath, indexPagePath } from "../../constants";
 import "./CreateAgreement.scss";
 import { DateTimePicker, DropdownList, NumberPicker, Combobox } from "react-widgets";
 import { observer } from "mobx-react";
@@ -16,6 +16,12 @@ const AgreementConfirmButton = withRouter(({ history }) => (
 @observer
 export default class CreateAgreement extends Component {
 
+    BackButton = withRouter(({ history }) => (
+        <input type="submit"
+               onClick={ () => { history.push(getPathForRouter(indexPagePath)) } }
+               value="← Back"/>
+    ));
+
     onValueChange = (value) => state.inputAgreementTokenValue = value;
     onTokenSelect = (selectedToken) => state.inputAgreementSelectedToken = selectedToken;
     onDurationChange = (duration) => state.inputAgreementPeriodCounter = duration;
@@ -24,7 +30,8 @@ export default class CreateAgreement extends Component {
     onRecipientAddressChange = (a) => state.inputAgreementRecipientAddress = a;
 
     render () {
-        return <div>
+        const { BackButton } = this;
+        return <div className="create-agreement-page">
             <h1 className="center">
                 <div className="agreement icon"/>
                 Create a New Agreement
@@ -70,7 +77,8 @@ export default class CreateAgreement extends Component {
                                     onChange={ this.onStartDateSet }/>
                 </div>
             </div>
-            <div className="center standard-padding">
+            <div className="center standard-padding buttons">
+                <BackButton/>
                 <AgreementConfirmButton/>
             </div>
         </div>

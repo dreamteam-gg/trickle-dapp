@@ -19,6 +19,13 @@ const state = observable({
     inputAgreementPeriodCounter: defaultDurationCounter,
     inputAgreementStartDate: new Date(),
 
+    agreementRecipientAddress: "0x17A813dF7322F8AAC5cAc75eB62c0d13B8aea29D",
+    agreementSenderAddress: "0x17A813dF7322F8AAC5cAc75eB62c0d13B8aea29D",
+    agreementTokenValue: 100,
+    agreementTokenAddress: "",
+    agreementDuration: defaultDurationCounter * defaultDurationOption,
+    agreementStartDate: new Date(),
+
     confirmationTokensAreApproved: false,
     confirmationDisplayError: "",
 

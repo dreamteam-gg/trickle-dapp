@@ -28,15 +28,17 @@ export default class Index extends Component {
     render () {
         const { CreateAgreementButton } = this;
         return <div className="center index page">
-            <h1>Trickle</h1>
             <div>
-                Your hourly pay, cryptographically secured.
-            </div>
-            <p>
-                [Some fun graphics here]
-            </p>
-            <div className="center standard-padding">
-                <CreateAgreementButton/>
+                <h1>Trickle</h1>
+                <div>
+                    Your hourly pay, cryptographically secured.
+                </div>
+                <p>
+                    [Some fun graphics here]
+                </p>
+                <div className="center standard-padding">
+                    <CreateAgreementButton/>
+                </div>
             </div>
             <div>{ state.relatedAgreements.map((agreement) =>
                 <div key={ agreement.agreementId }

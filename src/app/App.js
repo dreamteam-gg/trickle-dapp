@@ -26,7 +26,9 @@ export default class App extends Component {
             <Header/>
             <div className="page">
                 <Switch>
-                    <Route exact path={ getPathForRouter(agreementPagePath) } component={ Agreement } />
+                    <Route exact path={ getPathForRouter(agreementPagePath, {
+                        agreementId: ":agreementId"
+                    }) } component={ ({ match: { params } }) => <Agreement { ...params }/> } />
                     <Route exact path={ getPathForRouter(confirmAgreementPagePath) } component={ ConfirmAgreement } />
                     <Route exact path={ getPathForRouter(createAgreementPagePath) } component={ CreateAgreement } />
                     <Route exact path={ getPathForRouter(loadingPagePath) } component={ Loading } />

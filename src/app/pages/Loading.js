@@ -8,8 +8,12 @@ import "./Loading.scss";
 export function startLoading (history, redirect, title, desc) {
     history.push(getPathForRouter(loadingPagePath));
     state.loadingRedirectTo = redirect;
-    state.loadingPageHeader = title;
-    state.loadingPageText = desc;
+    if (title) {
+        state.loadingPageHeader = title;
+    }
+    if (desc) {
+        state.loadingPageText = desc;
+    }
 }
 
 export function completeLoading (history) {

@@ -7,12 +7,6 @@ import { withRouter } from "react-router-dom";
 import { getPathForRouter } from "../../utils";
 import { startLoading, completeLoading } from "./Loading";
 
-const BackToEditingButton = withRouter(({ history }) => (
-    <input type="submit"
-           onClick={ () => { history.push(getPathForRouter(createAgreementPagePath)) } }
-           value="← Back to Editing"/>
-));
-
 @observer
 export default class ConfirmAgreement extends Component {
 
@@ -26,6 +20,12 @@ export default class ConfirmAgreement extends Component {
         <input type="submit"
                onClick={ this.createAgreement.bind(this, history) }
                value="Create Agreement"/>
+    ));
+
+    BackToEditingButton = withRouter(({ history }) => (
+        <input type="submit"
+               onClick={ () => { history.push(getPathForRouter(createAgreementPagePath)) } }
+               value="← Back to Editing"/>
     ));
 
     async componentDidMount () {
@@ -67,13 +67,19 @@ export default class ConfirmAgreement extends Component {
         // TODO: transaction publishing logic
         await new Promise((r) => setTimeout(r, 2000)); // Emulate approval mining; allow some extra time
 
+        startLoading( // Just to give the new agreementId
+            history,
+            getPathForRouter(agreementPagePath, {
+                agreementId: 1
+            }),
+        );
         completeLoading(history);
 
     }
 
     render () {
         const {
-            CreateAgreementButton, ApproveTokensDemoButton
+            CreateAgreementButton, ApproveTokensDemoButton, BackToEditingButton
         } = this;
         console.log(state.confirmationTokensAreApproved);
         return <div className="standard-padding confirm-agreement-page">

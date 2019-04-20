@@ -1,0 +1,13 @@
+@import "../Const.scss";
+
+.agreement-page {
+
+    > .buttons {
+
+        > * {
+            margin: $globalMargin;
+        }
+
+    }
+
+}

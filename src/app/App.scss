@@ -50,10 +50,16 @@ html, body {
 }
 
 input[type=submit] {
+    
     @extend .rw-widget-container, .rw-widget-picker, .rw-widget-input, .rw-input;
     cursor: pointer !important;
     // font-weight: bold;
     background: #007eff;
     color: white;
     border: none;
+
+    &.negative {
+        background-color: #ff7985;
+    }
+
 }

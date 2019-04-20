@@ -1,64 +1,59 @@
 @import "../Const.scss";
 
-.double-input {
+.create-agreement-page {
 
-    display: flex;
-
-    > :first-child {
-        flex-grow: 1;
-        margin: $globalMargin;
-    }
-
-    > :last-child {
-        min-width: 140px;
-        margin: $globalMargin;
-    }
-
-}
-
-.form-input {
-
-    display: flex;
-    flex-direction: column;
-
-    > .label {
-        padding: 0 $globalMargin;
-        font-size: small;
-        color: gray;
-    }
-
-    > * {
+    .buttons {
 
         > * {
             margin: $globalMargin;
-            margin-top: 0;
         }
 
     }
-
-    &.double > * {
-
+    
+    .form-input {
+    
         display: flex;
-
-        > :first-child {
-            flex-basis: auto;
-            flex-grow: 1;
+        flex-direction: column;
+    
+        > .label {
+            padding: 0 $globalMargin;
+            font-size: small;
+            color: gray;
         }
-
-        > :last-child {
-            min-width: 140px;
-            flex-basis: auto;
-            flex-grow: 1;
+    
+        > * {
+    
+            > * {
+                margin: $globalMargin;
+                margin-top: 0;
+            }
+    
         }
-
+    
+        &.double > * {
+    
+            display: flex;
+    
+            > :first-child {
+                flex-basis: 50%;
+                flex-grow: 1;
+            }
+    
+            > :last-child {
+                flex-basis: 50%;
+                flex-grow: 1;
+            }
+    
+        }
+    
     }
-
-}
-
-.single-input {
-
-    > * {
-        margin: $globalMargin !important;
+    
+    .single-input {
+    
+        > * {
+            margin: $globalMargin !important;
+        }
+    
     }
 
 }
