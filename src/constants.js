@@ -20,7 +20,7 @@ export const defaultDurationOption = durationOptions[3];
 export const defaultDurationCounter = 3;
 
 export const contractsByNetwork = {
-    "homestead": {address: "0x635c36d72dcd6fbe72f84dff2f2d1b3d8bef47d2", block: 7607998},
+    "homestead": {address: "trickle.ethglobal.eth", block: 7607998}, // 0x635c36d72dcd6fbe72f84dff2f2d1b3d8bef47d2
     "ropsten": {address: "0x19631910d87516db1f1fc2047c1393db0eb8b32e", block: 5444958}
 };
 
