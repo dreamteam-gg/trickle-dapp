@@ -109,7 +109,7 @@ export default class ConfirmAgreement extends Component {
             </p>
             <ol className="subtext">
                 <li>
-                    <span className="bold">Smart Contract Address</span>: <a target="_blank" href={ getEtherscanLinkToAddress(state.inputAgreementSelectedToken.address, state.currentNetwork.name) }>{ state.inputAgreementSelectedToken.address }</a>
+                    <span className="bold">Smart Contract Address</span>: <a target="_blank" href={ getEtherscanLinkToAddress(state.currentTrickleContractAddress, state.currentNetwork.name) }>{ state.currentTrickleContractAddress }</a>
                 </li>
                 <li>
                     <span className="bold">Recipient Ethereum Account</span>: <a target="_blank" href={ getEtherscanLinkToAddress(state.inputAgreementRecipientAddress, state.currentNetwork.name) }>{ state.inputAgreementRecipientAddress }</a>

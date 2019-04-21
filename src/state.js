@@ -10,6 +10,7 @@ const state = observable({
         chainId: -1,
         name: "unknown"
     },
+    currentTrickleContractAddress: "",
 
     allTokens: [],
 
@@ -56,6 +57,8 @@ observe(state, "currentNetwork", action(async ({ newValue }) => {
         .find(({ address }) => address === "0x82f4ded9cec9b5750fbff5c2185aee35afc16587")
         || state.allTokens[0]
         || {};
+    
+    state.currentTrickleContractAddress = await Trickle.getTrickleAddress();
 
 }));
 

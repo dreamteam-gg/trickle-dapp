@@ -142,7 +142,7 @@ async function getTrickleBlock () {
 
 }
 
-async function getTrickleAddress () {
+export async function getTrickleAddress () {
 
     const provider = await getProvider();
     const net = await provider.getNetwork();
