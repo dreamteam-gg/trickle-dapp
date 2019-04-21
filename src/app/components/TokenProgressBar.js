@@ -9,7 +9,8 @@ export default class TokenProgressBar extends Component {
         value: 100, // whole number
         releasedValue: 0,
         decimals: 2,
-        tokenSymbol: "USD"
+        tokenSymbol: "USD",
+        canceled: false
     };
 
     state = {
@@ -32,9 +33,12 @@ export default class TokenProgressBar extends Component {
         const now = Date.now();
         const start = this.props.startDate.getTime();
         const duration = this.props.duration * 1000;
-        const ratio = Math.max(0, Math.min(1, ((now - start) / duration)));
-        const releasedRatio = Math.max(0, Math.min(1, (this.props.releasedValue / this.props.value)));
-        const value = this.props.value * ratio;
+        const propsValue = this.props.canceled ? this.props.releasedValue : this.props.value;
+        const ratio = this.props.canceled
+            ? (this.props.releasedValue / propsValue)
+            : Math.max(0, Math.min(1, ((now - start) / duration)));
+        const releasedRatio = Math.max(0, Math.min(1, (this.props.releasedValue / propsValue)));
+        const value = propsValue * ratio;
         const power = Math.pow(10, this.props.decimals);
         const tokensString = (Math.floor(value * power)).toString().padStart(this.props.decimals + 1, 0);
         const displayValue = `${ tokensString.slice(0, -this.props.decimals) }.${

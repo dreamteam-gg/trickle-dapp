@@ -21,7 +21,7 @@ export const defaultDurationCounter = 3;
 
 export const contractsByNetwork = {
     "homestead": {address: "0x", block: "0"},
-    "ropsten": {address: "0x85649F1721c87b3Fb26fb484642ff31561c2F0ae", block: 5444958}
+    "ropsten": {address: "0x19631910d87516db1f1fc2047c1393db0eb8b32e", block: 5444958}
 };
 
 export const confirmationsToWait = 1;

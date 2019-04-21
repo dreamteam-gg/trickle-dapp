@@ -36,8 +36,8 @@ export default class Agreement extends Component {
         startLoading(
             history,
             getPathForRouter(agreementPagePath, {agreementId: this.props.agreementId}),
-            "Cancelling your agreement...",
-            "Your submit transaction is being mined, please wait"
+            "Cancelling Your Agreement...",
+            "Your cancel transaction is being mined, please wait"
         );
 
         try {
@@ -56,8 +56,8 @@ export default class Agreement extends Component {
         startLoading(
             history,
             getPathForRouter(agreementPagePath, {agreementId: this.props.agreementId}),
-            "Withdraw your tokens...",
-            "Your submit transaction is being mined, please wait"
+            "Withdrawing Your Tokens...",
+            "Your withdraw transaction is being mined, please wait"
         );
 
         try {
@@ -144,7 +144,8 @@ export default class Agreement extends Component {
                                   value={ state.agreementTokenValue / Math.pow(10, state.agreementTokenDecimals) }
                                   releasedValue={ state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals) }
                                   decimals={ state.agreementTokenDecimals }
-                                  tokenSymbol={ state.agreementTokenSymbol }/>
+                                  tokenSymbol={ state.agreementTokenSymbol }
+                                  canceled={ state.agreementCancelled }/>
             </div>
             <div className="standard-padding">
                 <div className="subtext">
@@ -154,7 +155,9 @@ export default class Agreement extends Component {
                 </div>
                 <div className="subtext">
                     <strong>Withdrawable:</strong> {
-                        (progress * state.agreementTokenValue - state.agreementReleasedTokenValue) / Math.pow(10, state.agreementTokenDecimals)
+                        state.agreementCancelled
+                            ? 0
+                            : (progress * state.agreementTokenValue - state.agreementReleasedTokenValue) / Math.pow(10, state.agreementTokenDecimals)
                     } { state.agreementTokenSymbol }
                 </div>
             </div>
