@@ -81,7 +81,6 @@ export async function createAgreement () {
     const trickleContract = await getTrickleContract();
     const tx = await trickleContract.createAgreement(token, recipient, tokenValue, duration, start);
     const txReceipt = await tx.wait(confirmationsToWait);
-    console.log(txReceipt);
     const agreementCreatedEvent = txReceipt.events.find(
         (event) => { return event.event === 'AgreementCreated' }
     );

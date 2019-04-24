@@ -82,4 +82,4 @@ observe(state, "currentAccount", action(async ({ newValue }) => {
     ];
 }));
 
-console.log("State", state);
+console.log("State Object", state);
