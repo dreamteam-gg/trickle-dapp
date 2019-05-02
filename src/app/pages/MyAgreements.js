@@ -43,7 +43,10 @@ export default class MyAgreements extends Component {
                             className="agreement-card">
                     <div className="head">
                         <div>
-                            <div>Agreement #{ agreement.agreementId }</div>
+                            <div>
+                                <div className={ `arrow-${ isManaged ? "up" : "down" } tiny icon` }/>
+                                Agreement #{ agreement.agreementId }
+                            </div>
                         </div>
                         <div className="subtext dates">
                             <div>From { agreement.startDate.toLocaleString() }</div>
