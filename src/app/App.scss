@@ -60,10 +60,23 @@ html, body {
 
 .buttons {
 
-    > * {
+    > input {
         margin: $globalMargin !important;
+        box-shadow: $defaultShade !important;
     }
 
+}
+
+.agreement-status-active {
+    color: #00bd00;
+}
+
+.agreement-status-completed {
+    color: #ff9b00;
+}
+
+.agreement-status-canceled {
+    color: #f55;
 }
 
 strong {

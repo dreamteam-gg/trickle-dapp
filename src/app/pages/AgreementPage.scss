@@ -6,24 +6,18 @@
         margin-bottom: 0;
     }
 
-    .status-active {
-        color: #00bd00;
-    }
-
-    .status-completed {
-        color: #ff9b00;
-    }
-
-    .status-canceled {
-        color: #f55;
-    }
-
     > .buttons {
 
         > * {
             margin: $globalMargin;
         }
 
+    }
+
+    .form-input {
+        > div > .rw-widget > div {
+            box-shadow: $defaultShade;
+        }
     }
 
 }

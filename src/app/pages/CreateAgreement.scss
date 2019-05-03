@@ -2,6 +2,10 @@
 
 .create-agreement-page {
 
-    
+    .form-input {
+        > div > .rw-widget > div {
+            box-shadow: $defaultShade;
+        }
+    }
 
 }

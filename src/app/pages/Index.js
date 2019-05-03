@@ -34,7 +34,9 @@ export default class Index extends Component {
     MyAgreementsButton = withRouter(({ history }) => (
         <input type="submit"
                onClick={ () => { history.push(getPathForRouter(myAgreementsPagePath)) } }
-               value={ `My Agreements (${ state.relatedAgreements.length })` }/>
+               value={ `My Agreements (${ state.relatedAgreementsLoading
+                   ? "..."
+                   : state.relatedAgreements.length })` }/>
     ));
 
     render () {

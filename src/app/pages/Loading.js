@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import state from "../../state";
 import { getPathForRouter } from "../../utils";
 import { loadingPagePath } from "../../constants";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 import "./Loading.scss";
 
@@ -29,7 +30,7 @@ export default class Loading extends Component {
                 { state.loadingPageHeader }
             </h1>
             <div className="center">
-                <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                <LoadingSpinner/>
             </div>
             <p>{ state.loadingPageText }</p>
         </div>

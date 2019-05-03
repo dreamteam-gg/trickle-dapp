@@ -39,6 +39,7 @@ const state = observable({
     loadingPageText: "Please, wait",
     loadingRedirectTo: "",
 
+    relatedAgreementsLoading: true,
     relatedAgreements: [] // See pages/Index.js
 
 });
@@ -63,7 +64,10 @@ observe(state, "currentNetwork", action(async ({ newValue }) => {
 }));
 
 observe(state, "currentAccount", action(async ({ newValue }) => {
-    function mapAgreement(item) {
+
+    state.relatedAgreementsLoading = true;
+
+    function mapAgreement (item) {
         return {
             startDate: new Date(item.start * 1000),
             duration: item.duration.toString(),
@@ -73,13 +77,19 @@ observe(state, "currentAccount", action(async ({ newValue }) => {
         }
     }
 
-    const recipientAgreements = (await Trickle.getCreatedAgreements(newValue)).map(mapAgreement);
-    const senderAgreements = (await Trickle.getCreatedAgreements(null, newValue)).map(mapAgreement);
+    let [created, received] = await Promise.all([
+        Trickle.getCreatedAgreements(newValue),
+        Trickle.getCreatedAgreements(null, newValue)
+    ]);
+    [created, received] = [created.map(mapAgreement), received.map(mapAgreement)];
+    const allAgreements = created.concat(
+        received.filter(({ agreementId }) => !created.find(a => agreementId === a.agreementId))
+    ).sort((a, b) => +a.agreementId - b.agreementId);
 
-    state.relatedAgreements = [
-        ...recipientAgreements,
-        ...senderAgreements
-    ];
+    // Filter existing agreements to avoid duplicates (as created and received can get the same ID)
+    state.relatedAgreements = allAgreements;
+    state.relatedAgreementsLoading = false;
+
 }));
 
 console.log("State Object", state);

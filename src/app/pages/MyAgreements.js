@@ -5,6 +5,7 @@ import state from "../../state";
 import { withRouter } from "react-router-dom";
 import { indexPagePath, agreementPagePath } from "../../constants";
 import { getPathForRouter, shortenEthereumAddress } from "../../utils";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 @observer
 export default class MyAgreements extends Component {
@@ -33,11 +34,21 @@ export default class MyAgreements extends Component {
                 <div className="agreement icon"/>
                 My Agreements
             </h1>
+            { state.relatedAgreementsLoading
+                ? <div className="center"><LoadingSpinner/></div>
+                : null }
             <div>{ state.relatedAgreements.map((agreement) => {
 
+                const now = new Date();
                 const isManaged = agreement.sender === state.currentAccount;
                 const ButtonComponent = GoToAgreementButton(agreement.agreementId, isManaged);
                 const endDate = new Date(agreement.startDate.getTime() + agreement.duration * 1000);
+                const progress = Math.min(1, Math.max(0, (now.getTime() - agreement.startDate.getTime()) / (agreement.duration * 1000)));
+                const status = progress <= 0
+                    ? "Scheduled"
+                    : progress >= 1
+                        ? "Completed"
+                        : "Active";
 
                 return <div key={ agreement.agreementId }
                             className="agreement-card">
@@ -53,12 +64,15 @@ export default class MyAgreements extends Component {
                             <div>To { endDate.toLocaleString() }</div>
                         </div>
                     </div>
-                    <div className="addresses">
-                        <div className="subtext"><strong>Created By</strong>: { shortenEthereumAddress(agreement.sender) }</div>
-                        <div className="subtext"><strong>Recipient</strong>: { shortenEthereumAddress(agreement.recipient) }</div>
-                    </div>
-                    <div className="buttons center">
-                        <ButtonComponent/>
+                    <div className="body">
+                        <div className="addresses">
+                            <div className="subtext"><strong>Status</strong>: <strong className={ `agreement-status-${ status.toLowerCase() }` }>{ status }</strong></div>
+                            <div className="subtext"><strong>Created By</strong>: { shortenEthereumAddress(agreement.sender) }</div>
+                            <div className="subtext"><strong>Recipient</strong>: { shortenEthereumAddress(agreement.recipient) }</div>
+                        </div>
+                        <div className="buttons center">
+                            <ButtonComponent/>
+                        </div>
                     </div>
                 </div>
 

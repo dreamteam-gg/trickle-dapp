@@ -8,9 +8,14 @@ import { getPathForRouter, getEtherscanLinkToAddress } from "../../utils";
 import { startLoading, completeLoading } from "./Loading";
 import * as Trickle from "../../ethereum/Trickle";
 import { Toast } from "toaster-js";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 @observer
 export default class ConfirmAgreement extends Component {
+
+    state = {
+        approvalStatusLoading: true
+    };
 
     ApproveTokensDemoButton = withRouter(({ history }) => (
         <input type="submit"
@@ -43,7 +48,13 @@ export default class ConfirmAgreement extends Component {
     }
 
     async updateTokensApprovalState () {
+        this.setState({
+            approvalStatusLoading: true
+        });
         state.confirmationTokensAreApproved = await Trickle.isTokenAllowed();
+        this.setState({
+            approvalStatusLoading: false
+        });
     }
 
     approveTokens = async (history) => {
@@ -139,14 +150,16 @@ export default class ConfirmAgreement extends Component {
             <div>
                 { state.confirmationDisplayError }
             </div>
-            <div className="buttons-section">
+            <div className="buttons buttons-section">
                 <BackToEditingButton/>
-                { state.confirmationTokensAreApproved
-                    ? <CreateAgreementButton/>
-                    : <ApproveTokensDemoButton/>
+                { this.state.approvalStatusLoading
+                    ? <LoadingSpinner flat={ true }/>
+                    : state.confirmationTokensAreApproved
+                        ? <CreateAgreementButton/>
+                        : <ApproveTokensDemoButton/>
                 }
             </div>
-            <p>
+            <p className="subtext">
                 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             </p>
         </div>

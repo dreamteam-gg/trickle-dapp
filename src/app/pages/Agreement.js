@@ -137,7 +137,7 @@ export default class Agreement extends Component {
                 <div className="agreement icon"/>
                 Agreement #{ this.props["agreementId"] }
             </h1>
-            <div className="center subtext">Status: <strong className={ `status-${ status.toLowerCase() }` }>{ status }</strong></div>
+            <div className="center subtext">Status: <strong className={ `agreement-status-${ status.toLowerCase() }` }>{ status }</strong></div>
             <div>
                 <TokenProgressBar startDate={ state.agreementStartDate }
                                   duration={ state.agreementDuration }

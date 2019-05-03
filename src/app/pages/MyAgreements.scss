@@ -7,6 +7,13 @@ $img-path: '~react-widgets/lib/img';
 
     .agreement-card {
 
+        box-shadow: $defaultShade;
+        border: #ddd 1px solid;
+        text-align: left;
+        margin: $globalMargin;
+        background-color: white;
+        @extend .rw-widget-container;
+
         .dates {
             text-align: right;
         }
@@ -14,18 +21,13 @@ $img-path: '~react-widgets/lib/img';
         .addresses {
             
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
 
             > * {
                 flex-grow: 1;
             }
 
         }
-
-        text-align: left;
-        margin: $globalMargin;
-        background-color: white;
-        @extend .rw-widget-container;
 
         > .head {
 
@@ -47,6 +49,18 @@ $img-path: '~react-widgets/lib/img';
 
             .icon {
                 margin: 0 4px 2px 0;
+            }
+
+        }
+
+        > .body {
+            
+            display: flex;
+            flex-direction: row;
+
+            .buttons {
+                flex-grow: 1;
+                text-align: right;
             }
 
         }

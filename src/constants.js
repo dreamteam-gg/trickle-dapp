@@ -27,8 +27,8 @@ export const contractsByNetwork = {
 export const confirmationsToWait = 1;
 
 export const demoTokens = [
-    "DAI",
-    "ZRX",
     "USD",
-    "MKR"
+    "DAI",
+    "DREAM",
+    "BAT"
 ];
