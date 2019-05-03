@@ -12,6 +12,7 @@ import { agreementPagePath, createAgreementPagePath } from "../../constants";
 import { startLoading, completeLoading } from "./Loading";
 import { Combobox } from "react-widgets";
 import { Toast } from "toaster-js";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 @observer
 export default class Agreement extends Component {
@@ -19,7 +20,8 @@ export default class Agreement extends Component {
     // this.props["agreementId"] is available
 
     state = {
-        dummy: 0
+        dummy: 0,
+        loading: true
     };
 
     timer = 0;
@@ -44,7 +46,7 @@ export default class Agreement extends Component {
             await Trickle.cancelAgreement(this.props.agreementId);
         } catch (e) {
             console.log(e);
-            new Toast("Can't cancel already cancelled agreement", Toast.TYPE_ERROR);
+            new Toast("Can't cancel already canceled agreement", Toast.TYPE_ERROR);
             completeLoading(history, getPathForRouter(agreementPagePath, { agreementId: this.props.agreementId }));
             return;
         }
@@ -93,10 +95,21 @@ export default class Agreement extends Component {
 
     @action
     async componentDidMount () {
+
+        this.setState({
+            loading: true
+        });
+
         try {
+
             this.timer = setInterval(this.tick, 1000);
         
             const agreement = await Trickle.getAgreement(this.props.agreementId);
+            
+            const [decimals, symbol] = await Promise.all([
+                Trickle.getTokenDecimals(agreement.token),
+                Trickle.getTokenSymbol(agreement.token)
+            ]);
     
             state.agreementRecipientAddress = agreement.recipient;
             state.agreementDuration = +agreement.duration;
@@ -106,20 +119,22 @@ export default class Agreement extends Component {
             state.agreementTokenValue = agreement.totalAmount.toString();
             state.agreementReleasedTokenValue = agreement.releasedAmount.toString();
             state.agreementCancelled = agreement.cancelled;
-            
-            const [decimals, symbol] = await Promise.all([
-                Trickle.getTokenDecimals(agreement.token),
-                Trickle.getTokenSymbol(agreement.token)
-            ]);
-    
             state.agreementTokenDecimals = +decimals;
             state.agreementTokenSymbol = symbol;
+
         } catch (e) {
+
             console.log(e);
-            new Toast("Something wrong with agreement", Toast.TYPE_ERROR);
+            new Toast("Something wrong with the agreement: " + e, Toast.TYPE_ERROR);
             completeLoading(history, createAgreementPagePath);
             return;
+
         }
+
+        this.setState({
+            loading: false
+        });
+
     }
 
     render () {
@@ -138,26 +153,30 @@ export default class Agreement extends Component {
                 Agreement #{ this.props["agreementId"] }
             </h1>
             <div className="center subtext">Status: <strong className={ `agreement-status-${ status.toLowerCase() }` }>{ status }</strong></div>
-            <div>
-                <TokenProgressBar startDate={ state.agreementStartDate }
-                                  duration={ state.agreementDuration }
-                                  value={ state.agreementTokenValue / Math.pow(10, state.agreementTokenDecimals) }
-                                  releasedValue={ state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals) }
-                                  decimals={ state.agreementTokenDecimals }
-                                  tokenSymbol={ state.agreementTokenSymbol }
-                                  canceled={ state.agreementCancelled }/>
-            </div>
+            <div className="center">{
+                this.state.loading
+                    ? <LoadingSpinner/>
+                    : <TokenProgressBar startDate={ state.agreementStartDate }
+                                        duration={ state.agreementDuration }
+                                        value={ state.agreementTokenValue / Math.pow(10, state.agreementTokenDecimals) }
+                                        releasedValue={ state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals) }
+                                        decimals={ state.agreementTokenDecimals }
+                                        tokenSymbol={ state.agreementTokenSymbol }
+                                        canceled={ state.agreementCancelled }/>
+            }</div>
             <div className="standard-padding">
                 <div className="subtext">
                     <strong>Withdrawn:</strong> {
-                        state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals)
+                        (state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals))
+                        || 0
                     } { state.agreementTokenSymbol }
                 </div>
                 <div className="subtext">
                     <strong>Withdrawable:</strong> {
-                        state.agreementCancelled
+                        (state.agreementCancelled
                             ? 0
-                            : (progress * state.agreementTokenValue - state.agreementReleasedTokenValue) / Math.pow(10, state.agreementTokenDecimals)
+                            : (progress * state.agreementTokenValue - state.agreementReleasedTokenValue) / Math.pow(10, state.agreementTokenDecimals))
+                        || 0
                     } { state.agreementTokenSymbol }
                 </div>
             </div>
