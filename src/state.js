@@ -101,6 +101,7 @@ observe(state, "currentAccount", action(async ({ newValue }) => {
         }
     }
 
+    const now = Date.now();
     let [created, received] = await Promise.all([
         Trickle.getCreatedAgreements(newValue),
         Trickle.getCreatedAgreements(null, newValue)
@@ -108,7 +109,12 @@ observe(state, "currentAccount", action(async ({ newValue }) => {
     [created, received] = [created.map(mapAgreement), received.map(mapAgreement)];
     const allAgreements = created.concat(
         received.filter(({ agreementId }) => !created.find(a => agreementId === a.agreementId))
-    ).sort((a, b) => +a.agreementId - b.agreementId);
+    ).sort((a, b) => {
+        if (a.startDate.getTime() + a.duration * 1000 > now) { // Sort active agreements to top
+            return -1;
+        }
+        return +a.agreementId - b.agreementId
+    });
 
     // Filter existing agreements to avoid duplicates (as created and received can get the same ID)
     state.relatedAgreements = allAgreements;
