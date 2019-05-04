@@ -6,12 +6,7 @@ import { observer } from "mobx-react";
 import state from "../../state";
 import { withRouter } from "react-router-dom";
 import { getPathForRouter } from "../../utils";
-
-const AgreementConfirmButton = withRouter(({ history }) => (
-  <input type="submit"
-         onClick={ () => { history.push(getPathForRouter(confirmAgreementPagePath)) } }
-         value="Confirm"/>
-));
+import { Toast } from "toaster-js";
 
 @observer
 export default class CreateAgreement extends Component {
@@ -22,6 +17,12 @@ export default class CreateAgreement extends Component {
                value="← Back to Home"/>
     ));
 
+    AgreementConfirmButton = withRouter(({ history }) => (
+        <input type="submit"
+               onClick={ () => this.onAgreementConfirmClick() && history.push(getPathForRouter(confirmAgreementPagePath)) }
+               value="Confirm"/>
+    ))
+
     onValueChange = (value) => state.inputAgreementTokenValue = value;
     onTokenSelect = (selectedToken) => state.inputAgreementSelectedToken = selectedToken;
     onDurationChange = (duration) => state.inputAgreementPeriodCounter = duration;
@@ -29,8 +30,21 @@ export default class CreateAgreement extends Component {
     onStartDateSet = (startDate) => state.inputAgreementStartDate = startDate;
     onRecipientAddressChange = (a) => state.inputAgreementRecipientAddress = a;
 
+    onAgreementConfirmClick = () => {
+        if (state.inputAgreementTokenValue > state.inputAgreementSelectedTokensNumber + 0.9999999999) { // +1 as inputAgreementSelectedTokensNumber might be a whole number (super rare cases)
+            new Toast(
+                `Warning: it looks like you don't have ${ state.inputAgreementTokenValue
+                } ${ state.inputAgreementSelectedToken.symbol
+                } on your balance. Refill your balance with selected token and try again.`,
+                Toast.TYPE_INFO
+            );
+            return true;
+        }
+        return true;
+    };
+
     render () {
-        const { BackButton } = this;
+        const { BackButton, AgreementConfirmButton } = this;
         return <div className="create-agreement-page">
             <h1 className="center">
                 <div className="agreement icon"/>
@@ -45,7 +59,14 @@ export default class CreateAgreement extends Component {
                 </div>
             </div>
             <div className="double form-input">
-                <div className="label">Value Received by Recipient</div>
+                <div className="label">
+                    <div>Value Received by Recipient</div>
+                    <div className={ `right state-${
+                        state.inputAgreementSelectedTokensNumber >= state.inputAgreementTokenValue
+                            ? "positive"
+                            : "negative"
+                    }` }>You have { state.inputAgreementSelectedTokensNumber } DREAM</div>
+                </div>
                 <div>
                     <NumberPicker value={ state.inputAgreementTokenValue }
                                 onChange={ this.onValueChange }/>

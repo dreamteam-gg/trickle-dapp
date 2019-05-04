@@ -17,6 +17,12 @@ export async function getTokenSymbol (address) {
 
 }
 
+export async function getTokenBalanceOf (address, owner) {
+
+    return await (await getTokenContract(address)).balanceOf(owner);
+
+}
+
 export async function getAgreement (agreementId) {
 
     const contract = await getTrickleContract();
@@ -54,7 +60,7 @@ export async function createAgreement () {
 
     const token = state.inputAgreementSelectedToken.address;
     if (!token) {
-        throw new Error(`Undefined token adress`);
+        throw new Error(`Undefined token address`);
     }
 
     const recipient = state.inputAgreementRecipientAddress;

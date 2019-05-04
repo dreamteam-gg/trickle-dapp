@@ -16,7 +16,13 @@ const state = observable({
 
     inputAgreementRecipientAddress: "0x17A813dF7322F8AAC5cAc75eB62c0d13B8aea29D",
     inputAgreementTokenValue: 100,
-    inputAgreementSelectedToken: {},
+    inputAgreementSelectedToken: {
+        "address": "",
+        "symbol": "",
+        "decimal": 0,
+        "type": ""
+    },
+    inputAgreementSelectedTokensNumber: "?",
     inputAgreementPeriodDuration: defaultDurationOption, // Seconds
     inputAgreementPeriodCounter: defaultDurationCounter,
     inputAgreementStartDate: new Date(),
@@ -46,7 +52,25 @@ const state = observable({
 
 export default state;
 
-observe(state, "currentNetwork", action(async ({ newValue }) => {
+const reloadCurrentTokensTrigger = action(async () => {
+
+    if (!state.inputAgreementSelectedToken || !state.inputAgreementSelectedToken.address) {
+        return;
+    }
+
+    const value = await Trickle.getTokenBalanceOf(state.inputAgreementSelectedToken.address, state.currentAccount);
+
+    state.inputAgreementSelectedTokensNumber = +value.toString(10).slice(0, -state.inputAgreementSelectedToken.decimal);
+
+});
+
+observe(state, "inputAgreementSelectedToken", reloadCurrentTokensTrigger);
+observe(state, "currentAccount", reloadCurrentTokensTrigger);
+observe(state, "currentNetwork", reloadCurrentTokensTrigger);
+
+observe(state, "currentNetwork", action(async ({ newValue }) => { // Currently, this changes only at startup
+
+    // Dynamic change blocked by library https://github.com/ethers-io/ethers.js/issues/495
 
     if (!newValue || !newValue.name) {
         console.error("Unable to switch tokens: wrong value in state.currentNetwork", newValue);
@@ -58,7 +82,7 @@ observe(state, "currentNetwork", action(async ({ newValue }) => {
         .find(({ address }) => address === "0x82f4ded9cec9b5750fbff5c2185aee35afc16587")
         || state.allTokens[0]
         || {};
-    
+
     state.currentTrickleContractAddress = await Trickle.getTrickleAddress();
 
 }));
