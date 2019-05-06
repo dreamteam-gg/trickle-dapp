@@ -1,8 +1,17 @@
 # Trickle
 
-Your hourly pay, cryptographically secured with blockchain. Trickle lets you create safe hourly-rate-driven contracts with the people across the globe with no risks.
+Your hourly pay, cryptographically secured with blockchain. Trickle lets you create safe **fixed hourly rate contracts** with the people across the globe eliminating risks and wage theft. Create smart agreements with crypto: stablecoins or any ERC20-compatible tokens on top of [Ethereum](https://www.ethereum.org/).
 
-Create smart contracts with crypto: stablecoins and any ERC20-compatible tokens on top of Ethereum.
+**Useful Links:**
+
++ [Trickle DApp](https://trickle.gg)!
++ Trickle [front end repository](https://github.com/dreamteam-gg/trickle-frontend/) (the master repository for issues & feedback)
++ Trickle [smart contracts repository](https://github.com/dreamteam-gg/trickle-smart-contracts)
++ Trickle smart contracts in Ethereum network:
+   + Mainnet: [trickle.ethglobal.eth](https://etherscan.io/address/trickle.ethglobal.eth)
+   + Ropsten: [0x19631910d87516db1f1fc2047c1393db0eb8b32e](https://ropsten.etherscan.io/address/0x19631910d87516db1f1fc2047c1393db0eb8b32e)
++ Trickle at [DevPost](https://devpost.com/software/trickle) (winning project of [EthCapeTown](https://ethcapetown.com/) hackathon!)
++ Trickle [demo video](https://www.youtube.com/watch?v=6jz8Vux31BQ)
 
 <p align="center">
   <img width="405" height="720" src="https://user-images.githubusercontent.com/4989256/56658512-78914700-66a3-11e9-85a0-cd2d906d42ff.png">
