@@ -10,7 +10,7 @@ Your hourly pay, cryptographically secured with blockchain. Trickle lets you cre
 + Trickle smart contracts in Ethereum network:
    + Mainnet: [trickle.ethglobal.eth](https://etherscan.io/address/trickle.ethglobal.eth)
    + Ropsten: [0x19631910d87516db1f1fc2047c1393db0eb8b32e](https://ropsten.etherscan.io/address/0x19631910d87516db1f1fc2047c1393db0eb8b32e)
-+ Trickle at [DevPost](https://devpost.com/software/trickle) (winning project of [EthCapeTown](https://ethcapetown.com/) hackathon!)
++ Trickle at [DevPost](https://devpost.com/software/trickle) (the [winning](https://medium.com/the-ethereum-name-service/trickle-dtok-and-more-meet-the-ens-winners-at-ethcapetown-ebf160bd9e78) project of [EthCapeTown](https://ethcapetown.com/) hackathon!)
 + Trickle [demo video](https://www.youtube.com/watch?v=6jz8Vux31BQ)
 
 <p align="center">
