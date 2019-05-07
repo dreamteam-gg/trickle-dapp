@@ -5,7 +5,7 @@ Your hourly pay, cryptographically secured with blockchain. Trickle lets you cre
 **Useful Links:**
 
 + [Trickle DApp](https://trickle.gg)!
-+ Trickle [front end repository](https://github.com/dreamteam-gg/trickle-frontend/) (the master repository for issues & feedback)
++ Trickle [DApp master repository](https://github.com/dreamteam-gg/trickle-dapp/) (for issues & feedback)
 + Trickle [smart contracts repository](https://github.com/dreamteam-gg/trickle-smart-contracts)
 + Trickle smart contracts in Ethereum network:
    + Mainnet: [trickle.ethglobal.eth](https://etherscan.io/address/trickle.ethglobal.eth)
