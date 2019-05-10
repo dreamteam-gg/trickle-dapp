@@ -19,6 +19,11 @@ html, body {
     text-shadow: 1px 1px 1px white;
 }
 
+img {
+    max-width: 100%;
+    width: 400px;
+}
+
 .center {
     text-align: center;
 }
@@ -69,6 +74,10 @@ html, body {
         box-shadow: $defaultShade !important;
     }
 
+}
+
+.justified {
+    text-align: justify;
 }
 
 .agreement-status-active, .state-positive {

@@ -56,11 +56,8 @@ export default class NavBar extends Component {
     }
 
     InfoButton = withRouter(({ history }) => (
-        // <input type="submit"
-        //        onClick={ () => { history.push(getPathForRouter(indexPagePath)) } }
-        //        value="← Back to Home"/>
         <a href="#" onClick={ () => { history.push(getPathForRouter(infoPagePath)) } }>
-            <div className="small info icon"/>
+            <div className="small question icon"/>
         </a>
     ));
 
