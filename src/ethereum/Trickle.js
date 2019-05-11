@@ -152,7 +152,7 @@ export async function getTrickleAddress () {
     const provider = await getProvider();
     const net = await provider.getNetwork();
     const netName = (net || {}).name;
-    const address = contractsByNetwork[netName].address;
+    const address = (contractsByNetwork[netName] || {}).address;
 
     if (!address) {
         throw new Error(`Trickle contract is not deployed to selected network ${ netName }`);

@@ -2,6 +2,7 @@ import { observable, observe, action } from "mobx";
 import { defaultDurationOption, defaultDurationCounter } from "./constants";
 import tokens from "./tokens.json";
 import * as Trickle from "./ethereum/Trickle";
+import { Toast } from "toaster-js";
 
 const state = observable({
 
@@ -50,27 +51,7 @@ const state = observable({
 
 });
 
-export default state;
-
-const reloadCurrentTokensTrigger = action(async () => {
-
-    if (!state.inputAgreementSelectedToken || !state.inputAgreementSelectedToken.address) {
-        return;
-    }
-
-    const value = await Trickle.getTokenBalanceOf(state.inputAgreementSelectedToken.address, state.currentAccount);
-
-    state.inputAgreementSelectedTokensNumber = +value.toString(10).slice(0, -state.inputAgreementSelectedToken.decimal);
-
-});
-
-observe(state, "inputAgreementSelectedToken", reloadCurrentTokensTrigger);
-observe(state, "currentAccount", reloadCurrentTokensTrigger);
-observe(state, "currentNetwork", reloadCurrentTokensTrigger);
-
-observe(state, "currentNetwork", action(async ({ newValue }) => { // Currently, this changes only at startup
-
-    // Dynamic change blocked by library https://github.com/ethers-io/ethers.js/issues/495
+const reloadTrickleContractAndTokens = action(async ({ newValue }) => {
 
     if (!newValue || !newValue.name) {
         console.error("Unable to switch tokens: wrong value in state.currentNetwork", newValue);
@@ -83,11 +64,37 @@ observe(state, "currentNetwork", action(async ({ newValue }) => { // Currently, 
         || state.allTokens[0]
         || {};
 
-    state.currentTrickleContractAddress = await Trickle.getTrickleAddress();
+    try {
+        state.currentTrickleContractAddress = await Trickle.getTrickleAddress();
+    } catch (e) {
+        new Toast(e, Toast.TYPE_ERROR);
+        return;
+    }
 
-}));
+    await Promise.all([
+        reloadCurrentAgreements({ newValue: state.currentAccount }),
+        reloadCurrentTokensTrigger()
+    ]);
 
-observe(state, "currentAccount", action(async ({ newValue }) => {
+});
+
+const reloadCurrentTokensTrigger = action(async () => {
+
+    if (state.inputAgreementSelectedTokensNumber !== "...") {
+        state.inputAgreementSelectedTokensNumber = "...";
+    }
+
+    if (!state.inputAgreementSelectedToken || !state.inputAgreementSelectedToken.address) {
+        return;
+    }
+
+    const value = await Trickle.getTokenBalanceOf(state.inputAgreementSelectedToken.address, state.currentAccount);
+
+    state.inputAgreementSelectedTokensNumber = +value.toString(10).slice(0, -state.inputAgreementSelectedToken.decimal);
+
+});
+
+const reloadCurrentAgreements = action(async ({ newValue }) => {
 
     state.relatedAgreementsLoading = true;
 
@@ -113,13 +120,20 @@ observe(state, "currentAccount", action(async ({ newValue }) => {
         if (a.startDate.getTime() + a.duration * 1000 > now) { // Sort active agreements to top
             return -1;
         }
-        return +a.agreementId - b.agreementId
+        return +a.agreementId - b.agreementId;
     });
 
     // Filter existing agreements to avoid duplicates (as created and received can get the same ID)
     state.relatedAgreements = allAgreements;
     state.relatedAgreementsLoading = false;
 
-}));
+});
+
+observe(state, "inputAgreementSelectedToken", reloadCurrentTokensTrigger);
+observe(state, "currentAccount", reloadCurrentTokensTrigger);
+observe(state, "currentNetwork", reloadTrickleContractAndTokens);
+observe(state, "currentAccount", reloadCurrentAgreements);
 
 console.log("State Object", state);
+
+export default state;

@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import getProvider from "../ethereum/provider";
+import getProvider, { getWeb3Provider } from "../ethereum/provider";
 import { Toast } from "toaster-js";
 import "./Header.scss";
 import { DropdownList } from "react-widgets";
 import state from "../state";
 import { observer } from "mobx-react";
-import { infoPagePath } from "../constants";
+import { infoPagePath, ethNetworksByChainId } from "../constants";
 import { withRouter } from "react-router-dom";
 import { getPathForRouter } from "../utils";
+import { action } from "mobx";
 
 @observer
 export default class NavBar extends Component {
@@ -17,7 +18,9 @@ export default class NavBar extends Component {
     };
     accountUpdateTimeout = 0;
     provider = null;
+    web3Provider = null;
 
+    @action
     async updateFromProvider () {
         if (!this.provider) {
             return;
@@ -26,9 +29,20 @@ export default class NavBar extends Component {
         if (state.currentAccount != account) {
             state.currentAccount = account;
         }
-        const network = await this.provider.getNetwork(); // Always returns the same net, looks like a bug in Ethers
-        if (network && network.chainId !== state.currentNetwork.chainId) {
-            state.currentNetwork = network;
+        let network;
+        // this.provider.getNetwork() always returns the same net, looks like a bug in Ethers.js. Using the native method
+        do {
+            network = await new Promise((res, rej) => this.web3Provider.version.getNetwork((e, r) => e ? rej(e) : res(r)));
+            if (!ethNetworksByChainId[network]) {
+                new Toast("Unknown web3 network selected. Please, select mainnet or ropsten/kovan testnet", Toast.TYPE_ERROR);
+                await new Promise(r => setTimeout(r, 10000));
+            }
+        } while (!ethNetworksByChainId[network]);
+        if (+network != state.currentNetwork.chainId) {
+            state.currentNetwork = ethNetworksByChainId[network] || {
+                chainId: 0,
+                name: "Unknown"
+            };
         }
     }
 
@@ -39,7 +53,8 @@ export default class NavBar extends Component {
 
     async componentDidMount () {
         try {
-            this.provider = await getProvider();
+            this.web3Provider = await getWeb3Provider();
+            this.provider = await getProvider(this.web3Provider);
             this.updateFromProviderLoop();
             console.log("Provider", this.provider);
         } catch (e) {
