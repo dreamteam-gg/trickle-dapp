@@ -41,14 +41,16 @@ export default class MyAgreements extends Component {
 
                 const now = new Date();
                 const isManaged = agreement.sender === state.currentAccount;
-                const ButtonComponent = GoToAgreementButton(agreement.agreementId, isManaged);
                 const endDate = new Date(agreement.startDate.getTime() + agreement.duration * 1000);
                 const progress = Math.min(1, Math.max(0, (now.getTime() - agreement.startDate.getTime()) / (agreement.duration * 1000)));
                 const status = progress <= 0
                     ? "Scheduled"
                     : progress >= 1
                         ? "Completed"
-                        : "Active";
+                        : agreement.canceledAt
+                            ? "Canceled"
+                            : "Active";
+                const ButtonComponent = GoToAgreementButton(agreement.agreementId, agreement.canceledAt ? 0 : isManaged);
 
                 return <div key={ agreement.agreementId }
                             className="agreement-card">

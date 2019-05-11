@@ -69,12 +69,13 @@ export default class ConfirmAgreement extends Component {
         try {
             await Trickle.allowTokens();
         } catch (e) {
+            new Toast("Transaction failed: you've canceled the transaction", Toast.TYPE_ERROR);
             console.log(e);
-            new Toast("Transaction failed: you've cancelled the transaction", Toast.TYPE_ERROR);
             completeLoading(history, getPathForRouter(confirmAgreementPagePath));
             return;
         }
 
+        new Toast(`Tokens are approved! Now you can create the agreement.`, Toast.TYPE_DONE);
         completeLoading(history);
 
     }
@@ -85,26 +86,30 @@ export default class ConfirmAgreement extends Component {
             history,
             getPathForRouter(agreementPagePath),
             "Creating an Agreement...",
-            `Your agreement creation transaction of ${ state.inputAgreementTokenValue } ${ state.inputAgreementSelectedToken.symbol } is being mined, please wait...`
+            `Your agreement creation transaction of ${ state.inputAgreementTokenValue } ${ state.inputAgreementSelectedToken.symbol } is being mined, please wait. If you don't want to wait, you can close this tab; later on, you'll find this agreement created on the agreements page.`
         );
 
         let agreementId;
         try {
             agreementId = await Trickle.createAgreement();
         } catch (e) {
+            new Toast("Transaction failed: you've canceled the transaction or you have no required tokens", Toast.TYPE_ERROR);
             console.log(e);
-            new Toast("Transaction failed: you've cancelled the transaction or you have no required tokens", Toast.TYPE_ERROR);
             completeLoading(history, getPathForRouter(confirmAgreementPagePath));
             return;
         }
+        
+        state.relatedAgreementsUpdateCount++;
+        new Toast(`Agreement #${ agreementId } is created!`, Toast.TYPE_DONE);
 
+        await new Promise(r => setTimeout(r, 4000)); // +4 sec to avoid network delays
         startLoading( // Just to give the new agreementId
             history,
-            getPathForRouter(agreementPagePath, {agreementId}),
+            getPathForRouter(agreementPagePath, { agreementId })
         );
         completeLoading(history);
 
-    }
+    };
 
     render () {
         const {
@@ -138,13 +143,13 @@ export default class ConfirmAgreement extends Component {
                     <span className="bold">Agreement Period Ends At</span>: { new Date(state.inputAgreementStartDate.getTime() + state.inputAgreementPeriodDuration.value * state.inputAgreementPeriodCounter * 1000).toLocaleString() } ({ state.inputAgreementPeriodCounter } { state.inputAgreementPeriodDuration.label })
                 </li>
                 <li>
-                    <span className="bold">Token Distribution Rule</span>: Linear over entire period. Recipient can withdraw available tokens at any time.
+                    <span className="bold">Token Distribution Rule</span>: linear over entire period. Recipient can withdraw accrued tokens at any time.
                 </li>
                 <li>
-                    <span className="bold">Agreement Termination Policy</span>: Recipient receives all tokens that accrued prior to the termination date. 
+                    <span className="bold">Agreement Termination Policy</span>: recipient receives all tokens that accrued prior to the termination date with no exceptions. 
                 </li>
                 <li>
-                    <span className="bold">Agreement Can Be Terminated By</span>: Customer only.
+                    <span className="bold">Agreement Can Be Terminated By</span>: both by the agreement creator and the recipient.
                 </li>
             </ol>
             <div>

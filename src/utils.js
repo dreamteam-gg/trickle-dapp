@@ -1,5 +1,6 @@
 import { publicUrlPathPrefix } from "./constants";
 import { Toast } from "toaster-js";
+import { utils as ethersUtils } from "ethers";
 
 export function getPathForRouter (path, params = {}) {
     return `${ publicUrlPathPrefix }${ path.replace(/\:([^\/]+)/g, (_, paramName) => {
@@ -16,6 +17,19 @@ export function shortenEthereumAddress (address) {
 
 export function getEtherscanLinkToAddress (address, networkName) {
     return `https://${ networkName === "homestead" || !networkName ? "" : (networkName + ".") }etherscan.io/address/${ address }`;
+}
+
+export function bigNumberify (a) {
+    return ethersUtils.bigNumberify(a);
+}
+
+export function getStringFromNumberWithDecimals (number, decimals = 0) {
+    const string = number.toString().padStart(decimals + 1, "0");
+    return string.substr(0, string.length - decimals) + (
+        decimals
+            ? ("." + string.substr(-decimals))
+            : ""
+    );
 }
 
 function fallbackCopyTextToClipboard (text) {

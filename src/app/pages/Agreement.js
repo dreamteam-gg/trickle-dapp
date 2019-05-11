@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 import TokenProgressBar from "../components/TokenProgressBar";
 import "./AgreementPage.scss";
 import { myAgreementsPagePath } from "../../constants";
-import { getPathForRouter } from "../../utils";
+import { getPathForRouter, bigNumberify, getStringFromNumberWithDecimals } from "../../utils";
 import * as Trickle from "../../ethereum/Trickle";
 import { agreementPagePath, createAgreementPagePath } from "../../constants";
 import { startLoading, completeLoading } from "./Loading";
@@ -35,31 +35,39 @@ export default class Agreement extends Component {
     });
 
     async cancelAgreementButtonClick (history) {
+
         startLoading(
             history,
             getPathForRouter(agreementPagePath, {agreementId: this.props.agreementId}),
-            "Cancelling Your Agreement...",
-            "Your cancel transaction is being mined, please wait"
+            "Canceling Your Agreement...",
+            "Your cancel transaction is being mined, please wait..."
         );
 
         try {
             await Trickle.cancelAgreement(this.props.agreementId);
         } catch (e) {
-            console.log(e);
             new Toast("Can't cancel already canceled agreement", Toast.TYPE_ERROR);
+            console.log(e);
             completeLoading(history, getPathForRouter(agreementPagePath, { agreementId: this.props.agreementId }));
             return;
         }
 
+        new Toast(`Agreement #${ this.props.agreementId } is canceled!`, Toast.TYPE_WARNING);
+
+        await new Promise(r => setTimeout(r, 4000)); // +4 sec to avoid network delays
+        state.relatedAgreementsUpdateCount++;
+
         completeLoading(history);
+
     }
 
     async withdrawButtonClick (history) {
+
         startLoading(
             history,
             getPathForRouter(agreementPagePath, {agreementId: this.props.agreementId}),
             "Withdrawing Your Tokens...",
-            "Your withdraw transaction is being mined, please wait"
+            "Your withdraw transaction is being mined, please wait..."
         );
 
         try {
@@ -71,7 +79,12 @@ export default class Agreement extends Component {
             return;
         }
 
+        new Toast(`Available tokens were withdrawn!`, Toast.TYPE_DONE);
+
+        await new Promise(r => setTimeout(r, 4000)); // +4 sec to avoid network delays
+
         completeLoading(history);
+
     }
 
     BackToAgreementsButton = withRouter(({ history }) => (
@@ -94,41 +107,40 @@ export default class Agreement extends Component {
     ));
 
     @action
+    async updateAgreement () {
+        
+        const agreement = await Trickle.getAgreement(this.props.agreementId);
+        const [decimals, symbol] = await Promise.all([
+            Trickle.getTokenDecimals(agreement.token),
+            Trickle.getTokenSymbol(agreement.token)
+        ]);
+
+        state.agreementRecipientAddress = agreement.recipient;
+        state.agreementDuration = +agreement.duration;
+        state.agreementStartDate = new Date(agreement.start * 1000);
+        state.agreementSenderAddress = agreement.sender;
+        state.agreementTokenAddress = agreement.token;
+        state.agreementTokenValue = agreement.totalAmount.toString();
+        state.agreementReleasedTokenValue = agreement.releasedAmount.toString();
+        state.agreementTokenDecimals = +decimals;
+        state.agreementTokenSymbol = symbol;
+
+    }
+
     async componentDidMount () {
 
         this.setState({
             loading: true
         });
+        this.timer = setInterval(this.tick, 1000);
 
         try {
-
-            this.timer = setInterval(this.tick, 1000);
-        
-            const agreement = await Trickle.getAgreement(this.props.agreementId);
-            
-            const [decimals, symbol] = await Promise.all([
-                Trickle.getTokenDecimals(agreement.token),
-                Trickle.getTokenSymbol(agreement.token)
-            ]);
-    
-            state.agreementRecipientAddress = agreement.recipient;
-            state.agreementDuration = +agreement.duration;
-            state.agreementStartDate = new Date(agreement.start * 1000);
-            state.agreementSenderAddress = agreement.sender;
-            state.agreementTokenAddress = agreement.token;
-            state.agreementTokenValue = agreement.totalAmount.toString();
-            state.agreementReleasedTokenValue = agreement.releasedAmount.toString();
-            state.agreementCancelled = agreement.cancelled;
-            state.agreementTokenDecimals = +decimals;
-            state.agreementTokenSymbol = symbol;
-
+            await this.updateAgreement();
         } catch (e) {
-
             console.log(e);
             new Toast("Something wrong with the agreement: " + e, Toast.TYPE_ERROR);
             completeLoading(history, createAgreementPagePath);
             return;
-
         }
 
         this.setState({
@@ -141,12 +153,18 @@ export default class Agreement extends Component {
         const { CancelAgreementButton, WithdrawButton, BackToAgreementsButton } = this;
         const now = new Date();
         const progress = Math.min(1, Math.max(0, (now.getTime() - state.agreementStartDate.getTime()) / (state.agreementDuration * 1000)));
-        const status = (state.agreementCancelled) ? "Canceled" : progress <= 0
-            ? "Scheduled"
-            : progress >= 1
-                ? "Completed"
-                : "Active";
-        const isOwner = state.currentAccount === state.agreementSenderAddress;
+        const status = (progress < 1 && state.agreementTokenValue === state.agreementReleasedTokenValue)
+            ? "Canceled"
+            : progress <= 0
+                ? "Scheduled"
+                : progress >= 1
+                    ? "Completed"
+                    : "Active";
+        const isCanceled = status === "Canceled";
+        const isRelated = state.currentAccount === state.agreementSenderAddress
+            || state.currentAccount === state.agreementRecipientAddress;
+        const withdrawableAmount = bigNumberify(Math.floor(state.agreementTokenValue * progress))
+            .sub(state.agreementReleasedTokenValue);
         return <div className="agreement-page">
             <h1 className="standard-padding center agreement-header">
                 <div className="agreement icon"/>
@@ -162,20 +180,20 @@ export default class Agreement extends Component {
                                         releasedValue={ state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals) }
                                         decimals={ state.agreementTokenDecimals }
                                         tokenSymbol={ state.agreementTokenSymbol }
-                                        canceled={ state.agreementCancelled }/>
+                                        canceled={ isCanceled }/>
             }</div>
             <div className="standard-padding">
                 <div className="subtext">
                     <strong>Withdrawn:</strong> {
-                        (state.agreementReleasedTokenValue / Math.pow(10, state.agreementTokenDecimals))
+                        (getStringFromNumberWithDecimals(state.agreementReleasedTokenValue, state.agreementTokenDecimals))
                         || 0
                     } { state.agreementTokenSymbol }
                 </div>
                 <div className="subtext">
                     <strong>Withdrawable:</strong> {
-                        (state.agreementCancelled
+                        (isCanceled
                             ? 0
-                            : (progress * state.agreementTokenValue - state.agreementReleasedTokenValue) / Math.pow(10, state.agreementTokenDecimals))
+                            : getStringFromNumberWithDecimals(withdrawableAmount, state.agreementTokenDecimals))
                         || 0
                     } { state.agreementTokenSymbol }
                 </div>
@@ -201,7 +219,7 @@ export default class Agreement extends Component {
             <div className="center buttons">
                 <BackToAgreementsButton/>
                 <WithdrawButton/>
-                { isOwner ? <CancelAgreementButton/> : null }
+                { isRelated ? <CancelAgreementButton/> : null }
             </div>
         </div>
     }

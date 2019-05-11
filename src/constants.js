@@ -20,8 +20,18 @@ export const defaultDurationOption = durationOptions[3];
 export const defaultDurationCounter = 3;
 
 export const contractsByNetwork = {
-    "homestead": {address: "trickle.ethglobal.eth", block: 7607998}, // 0x635c36d72dcd6fbe72f84dff2f2d1b3d8bef47d2
-    "ropsten": {address: "0x19631910d87516db1f1fc2047c1393db0eb8b32e", block: 5444958}
+    "homestead": {
+        address: "trickle.ethglobal.eth", // Also 0x7EC0A611e7D491fBeEf62DbebbDB3E65E019bf9b
+        block: 7740627
+    },
+    "ropsten": {
+        address: "0x7EC0A611e7D491fBeEf62DbebbDB3E65E019bf9b",
+        block: 5576268
+    },
+    "kovan": {
+        address: "0x7EC0A611e7D491fBeEf62DbebbDB3E65E019bf9b",
+        block: 10933721
+    }
 };
 
 export const confirmationsToWait = 1;

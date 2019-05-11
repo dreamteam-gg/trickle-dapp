@@ -88,7 +88,7 @@ export async function createAgreement () {
     const tx = await trickleContract.createAgreement(token, recipient, tokenValue, duration, start);
     const txReceipt = await tx.wait(confirmationsToWait);
     const agreementCreatedEvent = txReceipt.events.find(
-        (event) => { return event.event === 'AgreementCreated' }
+        (event) => { return event.event === "AgreementCreated" }
     );
 
     return agreementCreatedEvent.args[0].toString();
@@ -96,21 +96,15 @@ export async function createAgreement () {
 }
 
 export async function cancelAgreement(agreementId) {
-    console.log(await getAgreement(agreementId));
-    
     const trickleContract = await getTrickleContract();
     const tx = await trickleContract.cancelAgreement(agreementId);
     await tx.wait(confirmationsToWait);
-    
-    console.log(await getAgreement(agreementId));
 }
 
 export async function withdrawTokens(agreementId) {
-
     const trickleContract = await getTrickleContract();
     const tx = await trickleContract.withdrawTokens(agreementId);
     await tx.wait(confirmationsToWait);
-
 }
 
 export async function getCreatedAgreements(recipient = null, sender = null) {
@@ -123,6 +117,20 @@ export async function getCreatedAgreements(recipient = null, sender = null) {
 
     let logs = await provider.getLogs(filter);
     logs = logs.map((item) => { return eventEntries.find(([,{ name }]) => name === "AgreementCreated")[1].decode(item.data, item.topics) });
+
+    return logs;
+}
+
+export async function getCanceledAgreements(recipient = null, sender = null) {
+    const contract = await getTrickleContract();
+    const provider = await getProvider();
+
+    const filter = contract.filters.AgreementCanceled(null, null, recipient, sender);
+    filter.fromBlock = await getTrickleBlock();
+    const eventEntries = Object.entries(contract.interface.events);
+
+    let logs = await provider.getLogs(filter);
+    logs = logs.map((item) => { return eventEntries.find(([,{ name }]) => name === "AgreementCanceled")[1].decode(item.data, item.topics) });
 
     return logs;
 }

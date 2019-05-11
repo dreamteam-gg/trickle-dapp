@@ -55,7 +55,8 @@ export default class CreateAgreement extends Component {
                 <div>
                     <Combobox data={[state.currentAccount]}
                               value={ state.inputAgreementRecipientAddress }
-                              onChange={ this.onRecipientAddressChange }/>
+                              onChange={ this.onRecipientAddressChange }
+                              placeholder="0x..."/>
                 </div>
             </div>
             <div className="double form-input">
@@ -69,26 +70,27 @@ export default class CreateAgreement extends Component {
                 </div>
                 <div>
                     <NumberPicker value={ state.inputAgreementTokenValue }
-                                onChange={ this.onValueChange }/>
+                                  onChange={ this.onValueChange }
+                                  min={ 0 }/>
                     <DropdownList filter
-                                data={ state.allTokens }
-                                onChange={ this.onTokenSelect }
-                                valueField="address"
-                                textField="symbol"
-                                value={ state.inputAgreementSelectedToken }/>
+                                  data={ state.allTokens }
+                                  onChange={ this.onTokenSelect }
+                                  valueField="address"
+                                  textField="symbol"
+                                  value={ state.inputAgreementSelectedToken }/>
                 </div>
             </div>
             <div className="double form-input">
                 <div className="label">Agreement Period</div>
                 <div>
                     <NumberPicker value={ state.inputAgreementPeriodCounter }
-                                onChange={ this.onDurationChange }/>
+                                  onChange={ this.onDurationChange }/>
                     <DropdownList filter
-                                data={ durationOptions }
-                                onChange={ this.onDurationSelect }
-                                valueField="value"
-                                textField="label"
-                                value={ state.inputAgreementPeriodDuration }/>
+                                  data={ durationOptions }
+                                  onChange={ this.onDurationSelect }
+                                  valueField="value"
+                                  textField="label"
+                                  value={ state.inputAgreementPeriodDuration }/>
                 </div>
             </div>
             <div className="single form-input">

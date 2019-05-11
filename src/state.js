@@ -15,7 +15,7 @@ const state = observable({
 
     allTokens: [],
 
-    inputAgreementRecipientAddress: "0x17A813dF7322F8AAC5cAc75eB62c0d13B8aea29D",
+    inputAgreementRecipientAddress: "",
     inputAgreementTokenValue: 100,
     inputAgreementSelectedToken: {
         "address": "",
@@ -28,16 +28,15 @@ const state = observable({
     inputAgreementPeriodCounter: defaultDurationCounter,
     inputAgreementStartDate: new Date(),
 
-    agreementRecipientAddress: "0x17A813dF7322F8AAC5cAc75eB62c0d13B8aea29D",
-    agreementSenderAddress: "0x17A813dF7322F8AAC5cAc75eB62c0d13B8aea29D",
+    agreementRecipientAddress: "",
+    agreementSenderAddress: "",
     agreementTokenValue: 100,
     agreementTokenSymbol: "USD",
     agreementReleasedTokenValue: 0,
     agreementTokenDecimals: 18,
     agreementTokenAddress: "",
-    agreementDuration: defaultDurationCounter * defaultDurationOption,
+    agreementDuration: defaultDurationCounter * defaultDurationOption.value,
     agreementStartDate: new Date(),
-    agreementCancelled: false,
 
     confirmationTokensAreApproved: false,
     confirmationDisplayError: "",
@@ -47,6 +46,7 @@ const state = observable({
     loadingRedirectTo: "",
 
     relatedAgreementsLoading: true,
+    relatedAgreementsUpdateCount: 0, // Inc this value to update related agreements
     relatedAgreements: [] // See pages/Index.js
 
 });
@@ -72,7 +72,7 @@ const reloadTrickleContractAndTokens = action(async ({ newValue }) => {
     }
 
     await Promise.all([
-        reloadCurrentAgreements({ newValue: state.currentAccount }),
+        reloadCurrentAgreements(),
         reloadCurrentTokensTrigger()
     ]);
 
@@ -94,36 +94,52 @@ const reloadCurrentTokensTrigger = action(async () => {
 
 });
 
-const reloadCurrentAgreements = action(async ({ newValue }) => {
+const reloadCurrentAgreements = action(async ({ newValue = state.currentAccount } = {}) => {
 
     state.relatedAgreementsLoading = true;
 
-    function mapAgreement (item) {
-        return {
-            startDate: new Date(item.start * 1000),
-            duration: item.duration.toString(),
-            agreementId: item.agreementId.toString(),
-            sender: item.sender,
-            recipient: item.recipient
-        }
-    }
+    const mapAgreement = (item) => ({
+        startDate: new Date(item.start * 1000),
+        duration: item.duration.toString(),
+        agreementId: item.agreementId.toString(),
+        sender: item.sender,
+        recipient: item.recipient,
+        amountReleased: item.amountReleased
+            ? item.amountReleased.toString()
+            : undefined,
+        amountCanceled: item.amountCanceled
+            ? item.amountCanceled.toString()
+            : undefined,
+        canceledAt: item.canceledAt
+            ? new Date(1000 * item.canceledAt.toString())
+            : undefined
+    });
 
     const now = Date.now();
-    let [created, received] = await Promise.all([
+    let [created, received, canceledCreated, canceledReceived] = await Promise.all([
         Trickle.getCreatedAgreements(newValue),
-        Trickle.getCreatedAgreements(null, newValue)
+        Trickle.getCreatedAgreements(null, newValue),
+        Trickle.getCanceledAgreements(newValue),
+        Trickle.getCanceledAgreements(null, newValue)
     ]);
-    [created, received] = [created.map(mapAgreement), received.map(mapAgreement)];
+    [created, received, canceledCreated, canceledReceived] = [
+        created, received, canceledCreated, canceledReceived
+    ].map(arr => arr.map(mapAgreement));
+    const canceledById = new Map(canceledCreated.concat(canceledReceived).map(a => [a.agreementId, a]));
     const allAgreements = created.concat(
+        // Filter existing agreements to avoid duplicates (as created and received can get the same ID)
         received.filter(({ agreementId }) => !created.find(a => agreementId === a.agreementId))
+    ).map(agreement => 
+        canceledById.has(agreement.agreementId)
+            ? Object.assign(agreement, canceledById.get(agreement.agreementId))
+            : agreement
     ).sort((a, b) => {
-        if (a.startDate.getTime() + a.duration * 1000 > now) { // Sort active agreements to top
+        if (a.startDate.getTime() + a.duration * 1000 > now) { // Sort active agreements to the top
             return -1;
         }
         return +a.agreementId - b.agreementId;
     });
 
-    // Filter existing agreements to avoid duplicates (as created and received can get the same ID)
     state.relatedAgreements = allAgreements;
     state.relatedAgreementsLoading = false;
 
@@ -133,6 +149,7 @@ observe(state, "inputAgreementSelectedToken", reloadCurrentTokensTrigger);
 observe(state, "currentAccount", reloadCurrentTokensTrigger);
 observe(state, "currentNetwork", reloadTrickleContractAndTokens);
 observe(state, "currentAccount", reloadCurrentAgreements);
+observe(state, "relatedAgreementsUpdateCount", reloadCurrentAgreements);
 
 console.log("State Object", state);
 

@@ -1,11 +1,19 @@
 import React, { Component } from "react";
 import "./Footer.scss";
+import { observer } from "mobx-react";
+import state from "../state";
 
+@observer
 export default class NavBar extends Component {
 
     render () {
+        const isMainnet = state.currentNetwork && state.currentNetwork.chainId == 1;
         return <div className="footer">
-            <div>The decentralized service is provided "as is"</div>
+            <div>The decentralized service is provided "as is" (@{
+                isMainnet
+                    ? <span className="state-positive">mainnet</span>
+                    : <span className="state-negative">testnet</span>
+            })</div>
             <div>
                 Powered by <a target="_blank" href="https://dreamteam.gg">DreamTeam</a>
             </div>

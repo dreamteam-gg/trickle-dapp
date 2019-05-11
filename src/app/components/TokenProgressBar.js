@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./TokenProgressBar.scss";
+import { getStringFromNumberWithDecimals } from "../../utils";
 
 export default class TokenProgressBar extends Component {
 
@@ -40,10 +41,8 @@ export default class TokenProgressBar extends Component {
         const releasedRatio = Math.max(0, Math.min(1, (this.props.releasedValue / propsValue)));
         const value = propsValue * ratio;
         const power = Math.pow(10, this.props.decimals);
-        const tokensString = (Math.floor(value * power)).toString().padStart(this.props.decimals + 1, 0);
-        const displayValue = `${ tokensString.slice(0, -this.props.decimals) }.${
-            tokensString.substr(-this.props.decimals, this.props.decimals)
-        }`;
+        const tokensString = (Math.floor(value * power)).toString();
+        const displayValue = getStringFromNumberWithDecimals(tokensString, this.props.decimals);
         return <div className="token-progress-bar">
             <div className="wrapper">
                 <div className="bar-wrapper">
