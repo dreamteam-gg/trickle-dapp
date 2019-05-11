@@ -177,7 +177,7 @@ export default class InfoPage extends Component {
             </p>
             <h1>More About Trickle</h1>
             <ul>
-                <li><a target="_blank" href="https://github.com/dreamteam-gg/trickle-dapp">Trickle DApp Repository (for questions, issues and wishes)</a></li>
+                <li><a target="_blank" href="https://github.com/dreamteam-gg/trickle-dapp">Trickle DApp Repository (for questions, issues, pull requests and wishes)</a></li>
                 <li><a target="_blank" href="https://devpost.com/software/trickle">Trickle at DevPost</a></li>
                 <li><a target="_blank" href="https://www.youtube.com/watch?v=6jz8Vux31BQ">Demo Video</a></li>
                 <li><a target="_blank" href="https://www.cryptocompare.com/coins/guides/dreamteam-the-first-esports-and-gaming-recruitment-and-management-network/">What is DreamTeam?</a></li>
