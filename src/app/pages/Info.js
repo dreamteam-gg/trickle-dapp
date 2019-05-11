@@ -30,7 +30,7 @@ export default class InfoPage extends Component {
                 Trickle How-To
             </h1>
             <p>
-                Trickle is a blockchain application that lets two parties create a secure <strong>fixed hourly
+                Trickle is a blockchain application that lets two parties create secure <strong>fixed hourly
                 rate</strong> agreements. The smart contract locks the reward for the recipient and releases
                 it in a <strong>linear proportion to time</strong>.
             </p>
@@ -52,9 +52,9 @@ export default class InfoPage extends Component {
                 If you haven't got any crypto wallet yet, select any which works best for you:
             </p>
             <ul>
-                <li><a href="https://metamask.io/" target="_blank">Metamask</a> as a plugin in browser</li>
+                <li><a href="https://metamask.io/" target="_blank">Metamask</a> as a plugin for browsers</li>
                 <li><a href="https://trustwallet.com/" target="_blank">Trust</a> as a mobile wallet</li>
-                <li><a href="https://trezor.io/" target="_blank">Trezor</a> or <a href="https://trezor.io/" target="_blank">Ledger</a> as hardware wallets (can be plugged to browser with <a href="https://metamask.io/" target="_blank">Metamask</a>)</li>
+                <li><a href="https://trezor.io/" target="_blank">Trezor</a> or <a href="https://trezor.io/" target="_blank">Ledger</a> as hardware wallets (can be plugged to a browser with <a href="https://metamask.io/" target="_blank">Metamask</a>)</li>
                 <li>Any other Ethereum wallet of your preference which <strong>has a DApp browser</strong> (can open this web app from the wallet)</li>
             </ul>
             <h1><u>Step 1.</u> <span className="sub-header">Buy Tokens/Stablecoins</span></h1>
@@ -107,7 +107,7 @@ export default class InfoPage extends Component {
                 <span className="tiny info icon"/>In addition to a token/stablecoin of
                 your choice, <strong>you have to purchase ETH</strong> - the Ethereum native currency, which
                 is required in order <strong>to do transactions</strong> in the network. Luckily, $1 worth
-                of ETH is enough for many transactions (it depends; but usually it's enough for ~10 transactions
+                of ETH is enough for many transactions (it depends, but usually it's enough for ~10 transactions
                 at 3 GWei gas price).
             </p>
             <p>
@@ -119,7 +119,7 @@ export default class InfoPage extends Component {
                 <img src={ howTo2 }/>
             </div>
             <p>
-                In order to create an agreement with Trickle, you need to agree the following with your party:
+                In order to create an agreement with Trickle, you need to agree on the following with your party:
             </p>
             <ul>
                 <li>The recipient's Ethereum address (wallet)</li>
@@ -148,7 +148,7 @@ export default class InfoPage extends Component {
                 option to send these tokens back to the contract creator's account is to cancel the agreement.
             </p>
             <p>
-                Once agreement is created, you'll be redirected to the agreement page. You can copy the URL
+                Once the agreement is created, you'll be redirected to the agreement page. You can copy the URL
                 (or the agreement ID) and send it to the recipient. At any moment later, both the agreement creator
                 and the recipient can find this agreement on "<strong>My Agreements</strong>" screen.
             </p>
@@ -175,6 +175,9 @@ export default class InfoPage extends Component {
                 using the exchange, or keep them for any later crypto agreements. Welcome to the
                 decentralized world!
             </p>
+            <p>
+                <span className="tiny info icon"/>Still, have questions? Ask <a href="https://github.com/dreamteam-gg/trickle-dapp/issues" target="_blank">here</a> by creating an issue. We'll be happy to help!
+            </p>
             <h1>More About Trickle</h1>
             <ul>
                 <li><a target="_blank" href="https://github.com/dreamteam-gg/trickle-dapp">Trickle DApp Repository (for questions, issues, pull requests and wishes)</a></li>
@@ -184,11 +187,11 @@ export default class InfoPage extends Component {
             </ul>
             <p>
                 Trickle is brought to you by <a href="https://dreamteam.gg/" target="_blank">DreamTeam</a> and its engineers <a href="https://beresnev.pro" target="_blank">Kirill Beresnev</a> and <a href="https://nikita.tk" target="_blank">Nikita Savchenko</a>.
-                Trickle has became a <a href="https://medium.com/the-ethereum-name-service/trickle-dtok-and-more-meet-the-ens-winners-at-ethcapetown-ebf160bd9e78" target="_blank">winning project</a> at <a href="https://ethcapetown.com/" target="_blank">ETHCapeTown</a> - the global Ethereum hackathon!
+                Trickle is a <a href="https://medium.com/the-ethereum-name-service/trickle-dtok-and-more-meet-the-ens-winners-at-ethcapetown-ebf160bd9e78" target="_blank">winning project</a> of <a href="https://ethcapetown.com/" target="_blank">ETHCapeTown</a> – the global Ethereum hackathon!
             </p>
             <p>
                 <a href="https://token.dreamteam.gg/" target="_blank">DreamTeam</a> and its engineers
-                maintain Trickle as a part of DreamTeam's compensations smart contracts PoC. Though this
+                maintain Trickle as a part of DreamTeam's <a href="https://medium.com/dreamteam-gg/dreamteam-tokenomics-7a6366949239" target="_blank">compensations smart contracts PoC</a>. Though this
                 open-sourced application was audited and is 100% ready for any third-party use.
             </p>
         </div>
