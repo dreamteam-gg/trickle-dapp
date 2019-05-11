@@ -191,9 +191,12 @@ export default class InfoPage extends Component {
             </p>
             <p>
                 <a href="https://token.dreamteam.gg/" target="_blank">DreamTeam</a> and its engineers
-                maintain Trickle as a part of DreamTeam's <a href="https://medium.com/dreamteam-gg/dreamteam-tokenomics-7a6366949239" target="_blank">compensations smart contracts PoC</a>. Though this
-                open-sourced application was audited and is 100% ready for any third-party use.
+                maintain Trickle as a part of DreamTeam's <a href="https://medium.com/dreamteam-gg/dreamteam-tokenomics-7a6366949239" target="_blank">compensations smart contracts PoC</a>.
+                This open-source application was audited and is 100% ready for any third-party use.
             </p>
+            <div className="center buttons">
+                <BackButton/>
+            </div>
         </div>
     }
 

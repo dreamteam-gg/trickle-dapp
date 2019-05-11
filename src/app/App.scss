@@ -150,6 +150,7 @@ input[type=submit] {
     background: #007eff;
     color: white;
     border: none;
+    -webkit-appearance: none;
 
     &.negative {
         background-color: #ff7985;
