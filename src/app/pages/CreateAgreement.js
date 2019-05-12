@@ -66,7 +66,7 @@ export default class CreateAgreement extends Component {
                         state.inputAgreementSelectedTokensNumber >= state.inputAgreementTokenValue
                             ? "positive"
                             : "negative"
-                    }` }>You have { state.inputAgreementSelectedTokensNumber } DREAM</div>
+                    }` }>You have { state.inputAgreementSelectedTokensNumber } { state.inputAgreementSelectedToken.symbol }</div>
                 </div>
                 <div>
                     <NumberPicker value={ state.inputAgreementTokenValue }
