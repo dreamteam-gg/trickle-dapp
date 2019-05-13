@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./Footer.scss";
 import { observer } from "mobx-react";
 import state from "../state";
+import { version } from "../../package.json";
 
 @observer
 export default class NavBar extends Component {
@@ -18,7 +19,8 @@ export default class NavBar extends Component {
                 Powered by <a target="_blank" href="https://dreamteam.gg">DreamTeam</a>
             </div>
             <div>
-                <a target="_blank" href="https://github.com/dreamteam-gg?q=trickle">Source Code</a>
+                <a target="_blank" href="https://github.com/dreamteam-gg/trickle-dapp/commits/master">v{ version }</a> |&nbsp;
+                <a target="_blank" href="https://github.com/dreamteam-gg/trickle-dapp">Source Code</a>
                 &nbsp;|&nbsp;
                 <a target="_blank" href="https://etherscan.io/address/trickle.ethglobal.eth#code">Smart Contract</a>
                 &nbsp;|&nbsp;

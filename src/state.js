@@ -58,9 +58,14 @@ const reloadTrickleContractAndTokens = action(async ({ newValue }) => {
         return;
     }
 
-    state.allTokens = (tokens[newValue.name] || []);
+    state.allTokens = [observable({
+        "address": "0x0000000000000000000000000000000000000000",
+        "symbol": "CUSTOM TOKEN",
+        "decimal": 18,
+        "type": "default"
+    })].concat(tokens[newValue.name] || []);
     state.inputAgreementSelectedToken = state.allTokens
-        .find(({ address }) => address === "0x82f4ded9cec9b5750fbff5c2185aee35afc16587")
+        .find(({ symbol }) => symbol === "DREAM")
         || state.allTokens[0]
         || {};
 

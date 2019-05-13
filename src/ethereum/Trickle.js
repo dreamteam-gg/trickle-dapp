@@ -13,7 +13,12 @@ export async function getTokenDecimals (address) {
 
 export async function getTokenSymbol (address) {
 
-    return await (await getTokenContract(address)).symbol();
+    try {
+        return await (await getTokenContract(address)).symbol();
+    } catch (e) {
+        const abi = tokenContractAbi;
+        return await (await getTokenContract(address, abi)).symbol();
+    }
 
 }
 
@@ -179,7 +184,7 @@ async function getTrickleContract () {
 
 }
 
-async function getTokenContract (addr) {
+async function getTokenContract (addr, abi = tokenContractAbi) {
 
     const address = addr || state.inputAgreementSelectedToken.address;
     if (!address) {
@@ -188,6 +193,6 @@ async function getTokenContract (addr) {
 
     const provider = await getProvider();
 
-    return new Contract(address, tokenContractAbi, provider.getSigner());
+    return new Contract(address, abi, provider.getSigner());
 
 }

@@ -2,6 +2,10 @@ import { publicUrlPathPrefix } from "./constants";
 import { Toast } from "toaster-js";
 import { utils as ethersUtils } from "ethers";
 
+export function isValidEthereumAddress (address) {
+    return typeof(address) === "string" && /^0x[0-9a-f]{40}$/i.test(address);
+}
+
 export function getPathForRouter (path, params = {}) {
     return `${ publicUrlPathPrefix }${ path.replace(/\:([^\/]+)/g, (_, paramName) => {
         return params[paramName] || "UNDEFINED_GOOSE";

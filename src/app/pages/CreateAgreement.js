@@ -5,8 +5,10 @@ import { DateTimePicker, DropdownList, NumberPicker, Combobox } from "react-widg
 import { observer } from "mobx-react";
 import state from "../../state";
 import { withRouter } from "react-router-dom";
-import { getPathForRouter } from "../../utils";
+import { getPathForRouter, isValidEthereumAddress } from "../../utils";
 import { Toast } from "toaster-js";
+import { observable, action } from "mobx";
+import { getTokenDecimals, getTokenSymbol } from "../../ethereum/Trickle";
 
 @observer
 export default class CreateAgreement extends Component {
@@ -29,6 +31,34 @@ export default class CreateAgreement extends Component {
     onDurationSelect = (selectedDurationPeriod) => state.inputAgreementPeriodDuration = selectedDurationPeriod;
     onStartDateSet = (startDate) => state.inputAgreementStartDate = startDate;
     onRecipientAddressChange = (a) => state.inputAgreementRecipientAddress = a;
+    onCustomTokenAddressChange = action(async (a) => {
+        state.allTokens[0].address = a;
+        if (!isValidEthereumAddress(a)) {
+            return;
+        }
+        try {
+            await getTokenSymbol(a)
+        } catch (e) {
+            console.error("Symbol get error", e);
+        }
+        try {
+            await getTokenDecimals(a)
+        } catch (e) {
+            console.error("Decimals get error", e);
+        }
+        try {
+            [state.allTokens[0].symbol, state.allTokens[0].decimal] = await Promise.all([
+                getTokenSymbol(a),
+                getTokenDecimals(a)
+            ]);
+            state.allTokens[0].symbol += " (custom)";
+        } catch (e) {
+            new Toast(`Address ${ a } is not a token contract; ${ e }`, Toast.TYPE_ERROR);
+            console.error(e);
+        }
+        // Trigger updates
+        state.inputAgreementSelectedToken = state.allTokens[0] = observable(Object.assign({}, state.allTokens[0]));
+    });
 
     onAgreementConfirmClick = () => {
         if (state.inputAgreementTokenValue > state.inputAgreementSelectedTokensNumber + 0.9999999999) { // +1 as inputAgreementSelectedTokensNumber might be a whole number (super rare cases)
@@ -80,6 +110,18 @@ export default class CreateAgreement extends Component {
                                   value={ state.inputAgreementSelectedToken }/>
                 </div>
             </div>
+            { state.allTokens[0] === state.inputAgreementSelectedToken // Custom token selected
+                ? <div className="single form-input">
+                    <div className="label">Custom Token Address</div>
+                    <div>
+                        <Combobox data={[]}
+                                value={ state.allTokens[0].address }
+                                onChange={ this.onCustomTokenAddressChange }
+                                placeholder="0x..."/>
+                    </div>
+                </div>
+                : null
+            }
             <div className="double form-input">
                 <div className="label">Agreement Period</div>
                 <div>
