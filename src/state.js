@@ -59,7 +59,7 @@ const reloadTrickleContractAndTokens = action(async ({ newValue }) => {
     }
 
     state.allTokens = [observable({
-        "address": "0x0000000000000000000000000000000000000000",
+        "address": "0x...",
         "symbol": "CUSTOM TOKEN",
         "decimal": 18,
         "type": "default"

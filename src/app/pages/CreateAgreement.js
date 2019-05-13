@@ -37,24 +37,15 @@ export default class CreateAgreement extends Component {
             return;
         }
         try {
-            await getTokenSymbol(a)
-        } catch (e) {
-            console.error("Symbol get error", e);
-        }
-        try {
-            await getTokenDecimals(a)
-        } catch (e) {
-            console.error("Decimals get error", e);
-        }
-        try {
             [state.allTokens[0].symbol, state.allTokens[0].decimal] = await Promise.all([
                 getTokenSymbol(a),
                 getTokenDecimals(a)
             ]);
             state.allTokens[0].symbol += " (custom)";
         } catch (e) {
-            new Toast(`Address ${ a } is not a token contract; ${ e }`, Toast.TYPE_ERROR);
+            new Toast(`Address ${ a } is not a token contract; ${ e }`, Toast.TYPE_ERROR, Toast.TIME_LONG);
             console.error(e);
+            return;
         }
         // Trigger updates
         state.inputAgreementSelectedToken = state.allTokens[0] = observable(Object.assign({}, state.allTokens[0]));
