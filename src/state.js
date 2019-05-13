@@ -30,7 +30,7 @@ const state = observable({
 
     agreementRecipientAddress: "",
     agreementSenderAddress: "",
-    agreementTokenValue: 100,
+    agreementTokenValue: "100",
     agreementTokenSymbol: "USD",
     agreementReleasedTokenValue: 0,
     agreementTokenDecimals: 18,

@@ -108,13 +108,12 @@ export default class Agreement extends Component {
 
     @action
     async updateAgreement () {
-        
+
         const agreement = await Trickle.getAgreement(this.props.agreementId);
         const [decimals, symbol] = await Promise.all([
             Trickle.getTokenDecimals(agreement.token),
             Trickle.getTokenSymbol(agreement.token)
         ]);
-
         state.agreementRecipientAddress = agreement.recipient;
         state.agreementDuration = +agreement.duration;
         state.agreementStartDate = new Date(agreement.start * 1000);
@@ -137,8 +136,8 @@ export default class Agreement extends Component {
         try {
             await this.updateAgreement();
         } catch (e) {
-            console.log(e);
             new Toast("Something wrong with the agreement: " + e, Toast.TYPE_ERROR);
+            console.log(e);
             completeLoading(history, createAgreementPagePath);
             return;
         }
@@ -163,7 +162,9 @@ export default class Agreement extends Component {
         const isCanceled = status === "Canceled";
         const isRelated = state.currentAccount === state.agreementSenderAddress
             || state.currentAccount === state.agreementRecipientAddress;
-        const withdrawableAmount = bigNumberify(Math.floor(state.agreementTokenValue * progress))
+        const withdrawableAmount = bigNumberify(state.agreementTokenValue)
+            .mul(Math.floor(progress * 1000000000))
+            .div(1000000000)
             .sub(state.agreementReleasedTokenValue);
         return <div className="agreement-page">
             <h1 className="standard-padding center agreement-header">
