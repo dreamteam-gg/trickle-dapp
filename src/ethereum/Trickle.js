@@ -5,6 +5,7 @@ import getProvider from "./provider";
 import { contractsByNetwork, confirmationsToWait } from "../constants";
 import state from "../state";
 import { toUtf8String } from "ethers/utils/utf8";
+import cloneDeep from "clone-deep";
 
 export async function getTokenDecimals (address) {
 
@@ -19,13 +20,12 @@ export async function getTokenSymbol (address) {
     } catch (e) {
         // Crutch for DAI Token: https://etherscan.io/token/0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359
         // They've defined symbol as "bytes32" but not "string"...
-        const abi = tokenContractAbi.map((item) => {
+        const abi = cloneDeep(tokenContractAbi).map((item) => {
             if (item.name === "symbol") {
                 item.outputs[0].type = "bytes32";
             }
             return item;
         });
-        window.toUtf8String = toUtf8String;
         const symbol = await (await getTokenContract(address, abi)).symbol();
         return toUtf8String(symbol.replace(/0+$/, ""), true);
     }

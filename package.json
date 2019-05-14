@@ -1,6 +1,6 @@
 {
   "name": "trickle-dapp-frontend",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Your hourly pay, cryptographically secured.",
   "main": "index.js",
   "scripts": {
@@ -32,7 +32,9 @@
     "url": "https://github.com/ZitRos/trickle-dapp-frontend/issues"
   },
   "homepage": "https://github.com/ZitRos/trickle-dapp-frontend#readme",
-  "dependencies": {},
+  "dependencies": {
+    "clone-deep": "^4.0.1"
+  },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
