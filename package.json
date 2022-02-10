@@ -51,7 +51,7 @@
     "ethers": "^4.0.27",
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
